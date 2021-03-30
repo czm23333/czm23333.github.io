@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czm23333.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言这个其实是我很长一段时间之前弄的了，不过当时没有发出来(现在发出来水一下博客) 刚开学那会我在学校的某群吹水时，听说了微机室电脑有控制软件可以让老师看屏幕，于是在第一节微机课的前一天晚上连夜弄了一下这个 正文0x01 Find想要伪造画面，自然要用到Hook技术，可是要Hook哪里呢？  这里先贴一段截屏代码供参考  12345678910111213141516171819202122232">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[C++][Windows]通过Hook伪造截屏&#x2F;录屏画面">
+<meta property="og:url" content="https://czm23333.github.io/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/index.html">
+<meta property="og:site_name" content="czm&#39;s Blog">
+<meta property="og:description" content="前言这个其实是我很长一段时间之前弄的了，不过当时没有发出来(现在发出来水一下博客) 刚开学那会我在学校的某群吹水时，听说了微机室电脑有控制软件可以让老师看屏幕，于是在第一节微机课的前一天晚上连夜弄了一下这个 正文0x01 Find想要伪造画面，自然要用到Hook技术，可是要Hook哪里呢？  这里先贴一段截屏代码供参考  12345678910111213141516171819202122232">
+<meta property="og:locale">
+<meta property="og:image" content="https://z3.ax1x.com/2021/03/30/cFyWTA.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/03/30/cF6CXF.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/03/30/cF6c90.png">
+<meta property="article:published_time" content="2021-03-30T13:06:47.000Z">
+<meta property="article:modified_time" content="2021-03-30T14:36:59.467Z">
+<meta property="article:author" content="czm">
+<meta property="article:tag" content="Hook">
+<meta property="article:tag" content="伪造">
+<meta property="article:tag" content="截屏">
+<meta property="article:tag" content="录屏">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/03/30/cFyWTA.png">
+
+<link rel="canonical" href="https://czm23333.github.io/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>[C++][Windows]通过Hook伪造截屏/录屏画面 | czm's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">czm's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">this.log();</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/czm23333" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [C++][Windows]通过Hook伪造截屏/录屏画面
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-30 21:06:47 / 修改时间：22:36:59" itemprop="dateCreated datePublished" datetime="2021-03-30T21:06:47+08:00">2021-03-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><em>这个其实是我很长一段时间之前弄的了，不过当时没有发出来(<del>现在发出来水一下博客</del>)</em></p>
+<p>刚开学那会我在学校的某群吹水时，听说了微机室电脑有控制软件可以让老师看屏幕，于是在第一节微机课的前一天晚上连夜弄了一下这个</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="0x01-Find"><a href="#0x01-Find" class="headerlink" title="0x01 Find"></a>0x01 Find</h2><p>想要伪造画面，自然要用到Hook技术，可是要Hook哪里呢？</p>
+<details>
+<summary>这里先贴一段截屏代码供参考</summary>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; &amp;vtData, <span class="keyword">const</span> SIZE &amp;sizeImg)</span></span>;</span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc)</span></span>;</span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc, <span class="keyword">const</span> RECT &amp;rcDC)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; &amp;vtData, <span class="keyword">const</span> SIZE &amp;sizeImg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	BITMAPINFOHEADER bmInfoHeader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	bmInfoHeader.biSize = <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmInfoHeader.biWidth = sizeImg.cx;</span><br><span class="line">	bmInfoHeader.biHeight = sizeImg.cy;</span><br><span class="line">	bmInfoHeader.biPlanes = <span class="number">1</span>;</span><br><span class="line">	bmInfoHeader.biBitCount = <span class="number">24</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Bimap file header in order to write bmp file</span></span><br><span class="line">	BITMAPFILEHEADER bmFileHeader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	bmFileHeader.bfType = <span class="number">0x4d42</span>;  <span class="comment">//bmp  </span></span><br><span class="line">	bmFileHeader.bfOffBits = <span class="keyword">sizeof</span>(BITMAPFILEHEADER) + <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmFileHeader.bfSize = bmFileHeader.bfOffBits + ((bmInfoHeader.biWidth * bmInfoHeader.biHeight) * <span class="number">3</span>); <span class="comment">///3=(24 / 8)</span></span><br><span class="line"></span><br><span class="line">	HANDLE hFile = CreateFile(strFile.c_str(), GENERIC_WRITE, <span class="number">0</span>, <span class="literal">NULL</span>, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	DWORD dwWrite = <span class="number">0</span>;</span><br><span class="line">	WriteFile(hFile, &amp;bmFileHeader, <span class="keyword">sizeof</span>(BITMAPFILEHEADER), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line">	WriteFile(hFile, &amp;bmInfoHeader, <span class="keyword">sizeof</span>(BITMAPINFOHEADER), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line">	WriteFile(hFile, &amp;vtData[<span class="number">0</span>], vtData.size(), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	CloseHandle(hFile);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> iWidth = GetDeviceCaps(hdc, HORZRES);</span><br><span class="line">	<span class="keyword">int</span> iHeight = GetDeviceCaps(hdc, VERTRES);</span><br><span class="line">	RECT rcDC = &#123; <span class="number">0</span>,<span class="number">0</span>,iWidth,iHeight &#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> WriteBmp(strFile, hdc, rcDC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc, <span class="keyword">const</span> RECT &amp;rcDC)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	BOOL bRes = FALSE;</span><br><span class="line">	BITMAPINFO bmpInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	BYTE *pData = <span class="literal">NULL</span>;</span><br><span class="line">	SIZE sizeImg = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	HBITMAP hBmp = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; vtData;</span><br><span class="line">	HGDIOBJ hOldObj = <span class="literal">NULL</span>;</span><br><span class="line">	HDC hdcMem = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Initilaize the bitmap information	</span></span><br><span class="line">	bmpInfo.bmiHeader.biSize = <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmpInfo.bmiHeader.biWidth = rcDC.right - rcDC.left;</span><br><span class="line">	bmpInfo.bmiHeader.biHeight = rcDC.bottom - rcDC.top;</span><br><span class="line">	bmpInfo.bmiHeader.biPlanes = <span class="number">1</span>;</span><br><span class="line">	bmpInfo.bmiHeader.biBitCount = <span class="number">24</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Create the compatible DC to get the data</span></span><br><span class="line">	hdcMem = CreateCompatibleDC(hdc);</span><br><span class="line">	<span class="keyword">if</span> (hdcMem == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">goto</span> EXIT;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Get the data from the memory DC	</span></span><br><span class="line">	hBmp = CreateDIBSection(hdcMem, &amp;bmpInfo, DIB_RGB_COLORS, <span class="keyword">reinterpret_cast</span>&lt;VOID **&gt;(&amp;pData), <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (hBmp == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">goto</span> EXIT;</span><br><span class="line">	&#125;</span><br><span class="line">	hOldObj = SelectObject(hdcMem, hBmp);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Draw to the memory DC</span></span><br><span class="line">	sizeImg.cx = bmpInfo.bmiHeader.biWidth;</span><br><span class="line">	sizeImg.cy = bmpInfo.bmiHeader.biHeight;</span><br><span class="line">	StretchBlt(hdcMem,</span><br><span class="line">		<span class="number">0</span>,</span><br><span class="line">		<span class="number">0</span>,</span><br><span class="line">		sizeImg.cx,</span><br><span class="line">		sizeImg.cy,</span><br><span class="line">		hdc,</span><br><span class="line">		rcDC.left,</span><br><span class="line">		rcDC.top,</span><br><span class="line">		rcDC.right - rcDC.left + <span class="number">1</span>,</span><br><span class="line">		rcDC.bottom - rcDC.top + <span class="number">1</span>,</span><br><span class="line">		SRCCOPY);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	vtData.resize(sizeImg.cx * sizeImg.cy * <span class="number">3</span>);</span><br><span class="line">	<span class="built_in">memcpy</span>(&amp;vtData[<span class="number">0</span>], pData, vtData.size());</span><br><span class="line">	bRes = WriteBmp(strFile, vtData, sizeImg);</span><br><span class="line"></span><br><span class="line">	SelectObject(hdcMem, hOldObj);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EXIT:</span><br><span class="line">	<span class="keyword">if</span> (hBmp != <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		DeleteObject(hBmp);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (hdcMem != <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		DeleteDC(hdcMem);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> bRes;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HDC hdc = GetDC(<span class="number">0</span>);</span><br><span class="line">	HDC hMemDC = CreateCompatibleDC(hdc);</span><br><span class="line">	SelectObject(hMemDC, CreateCompatibleBitmap(hdc, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)));</span><br><span class="line">	BitBlt(hMemDC, <span class="number">0</span>, <span class="number">0</span>, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), hdc, <span class="number">0</span>, <span class="number">0</span>, SRCCOPY);</span><br><span class="line">	WriteBmp(<span class="string">L&quot;directWrite.bmp&quot;</span>, hdc);</span><br><span class="line">	WriteBmp(<span class="string">L&quot;copyWrite.bmp&quot;</span>, hMemDC);</span><br><span class="line">	ReleaseDC(GetActiveWindow(), hdc);</span><br><span class="line">	DeleteDC(hMemDC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+<h3 id="CreateDCA和CreateDCW？"><a href="#CreateDCA和CreateDCW？" class="headerlink" title="CreateDCA和CreateDCW？"></a>CreateDCA和CreateDCW？</h3><p>研究截屏的实现代码，首先可以想到CreateDCA和CreateDCW两个点，把程序拿到的屏幕DC替换掉</p>
+<p>但能够发现，GetDC(0)和GetDC(GetDesktopWindow())也能拿到截屏用的DC，这样我们又多了一个需要Hook的点，并且可能还有更多方法来获得这个DC</p>
+<p>还有，屏幕HDC并不一定只是用来读的，如果替换掉屏幕DC，很可能影响程序的正常显示</p>
+<p>因此，这个Hook点是不能用的</p>
+<span id="more"></span>
+
+<h3 id="BitBlt和StretchBlt"><a href="#BitBlt和StretchBlt" class="headerlink" title="BitBlt和StretchBlt"></a>BitBlt和StretchBlt</h3><p>再看一眼，我们可以发现，为了把屏幕DC中内容读出，也就是copy出来，在上面的示例代码中用到了BitBlt和StretchBlt，实际上也就只有这两个API可用</p>
+<p>这两个API的操作方向在参数中又是明确的，我们可以对参数进行确认避免误伤，所以这两个点不失为好的选择</p>
+<h2 id="0x02-Hook"><a href="#0x02-Hook" class="headerlink" title="0x02 Hook"></a>0x02 Hook</h2><p>决定了Hook的点，我们就可以开始Hook了</p>
+<p>在这里，我们将用到<a target="_blank" rel="noopener" href="https://github.com/TsudaKageyu/minhook">MinHook</a>这个简洁而好用的库来进行Hook操作</p>
+<p>为了判断一个DC属不属于屏幕设备，我们可以判断他的三个属性：TECHNOLOGY、HORZRES和VERTRES是否和屏幕设备相同</p>
+<p>如果确定了一个DC属于屏幕设备，那我们就可以把准备好的伪造画面代替原DC复制到目标DC中，伪造完成</p>
+<p>为了方便进入别的进程进行Hook操作，我们将用一个DLL进行全部操作</p>
+<details>
+<summary>同样贴出代码供参考</summary>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">map</span>&lt;PVOID, PVOID&gt; hookMap;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DoHook</span><span class="params">(HMODULE dll, <span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">void</span>* newfunc)</span> </span>&#123;</span><br><span class="line">	PVOID procAddress = GetProcAddress(dll, name);</span><br><span class="line">	PVOID originJmp;</span><br><span class="line">	MH_CreateHook(procAddress, newfunc, &amp;originJmp);</span><br><span class="line">	MH_EnableHook(procAddress);</span><br><span class="line">	hookMap[procAddress] = originJmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">HDC realDisplayDC = <span class="literal">NULL</span>;</span><br><span class="line">HDC fakeDisplayDC = <span class="literal">NULL</span>;</span><br><span class="line"><span class="keyword">int</span> width, height;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL  WINAPI <span class="title">MyStretchBlt</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	HDC hdcDest,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> xDest,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> yDest,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> wDest,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> hDest,</span></span></span><br><span class="line"><span class="function"><span class="params">	HDC hdcSrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> xSrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> ySrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> wSrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> hSrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	DWORD rop</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">auto</span> origin = <span class="keyword">decltype</span>(&amp;StretchBlt) (hookMap[&amp;StretchBlt]);</span><br><span class="line">	<span class="keyword">if</span> (GetDeviceCaps(hdcSrc, TECHNOLOGY) == DT_RASDISPLAY &amp;&amp; GetDeviceCaps(hdcSrc, HORZRES) == width &amp;&amp; GetDeviceCaps(hdcSrc, VERTRES) == height)</span><br><span class="line">		<span class="keyword">return</span> origin(hdcDest, xDest, yDest, wDest, hDest, fakeDisplayDC, xSrc, ySrc, wSrc, hSrc, rop);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> origin(hdcDest, xDest, yDest, wDest, hDest, hdcSrc, xSrc, ySrc, wSrc, hSrc, rop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">MyBitBlt</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">	HDC hdc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> x,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> y,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> cx,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> cy,</span></span></span><br><span class="line"><span class="function"><span class="params">	HDC hdcSrc,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> x1,</span></span></span><br><span class="line"><span class="function"><span class="params">	<span class="keyword">int</span> y1,</span></span></span><br><span class="line"><span class="function"><span class="params">	DWORD rop</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">static</span> <span class="keyword">auto</span> origin = <span class="keyword">decltype</span>(&amp;BitBlt) (hookMap[&amp;BitBlt]);</span><br><span class="line">	<span class="keyword">if</span> (GetDeviceCaps(hdcSrc, TECHNOLOGY) == DT_RASDISPLAY &amp;&amp; GetDeviceCaps(hdcSrc, HORZRES) == width &amp;&amp; GetDeviceCaps(hdcSrc, VERTRES) == height)</span><br><span class="line">		<span class="keyword">return</span> origin(hdc, x, y, cx, cy, fakeDisplayDC, x1, y1, rop);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> origin(hdc, x, y, cx, cy, hdcSrc, x1, y1, rop);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">( HMODULE hModule,</span></span></span><br><span class="line"><span class="function"><span class="params">                       DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="function"><span class="params">                       LPVOID lpReserved</span></span></span><br><span class="line"><span class="function"><span class="params">					 )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">		MH_Initialize();</span><br><span class="line">		width = GetSystemMetrics(SM_CXSCREEN);</span><br><span class="line">		height = GetSystemMetrics(SM_CYSCREEN);</span><br><span class="line">		realDisplayDC = CreateDCA(<span class="string">&quot;DISPLAY&quot;</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">		fakeDisplayDC = CreateCompatibleDC(realDisplayDC);</span><br><span class="line">		SelectObject(fakeDisplayDC, CreateCompatibleBitmap(realDisplayDC, width, height));</span><br><span class="line">		BitBlt(fakeDisplayDC, <span class="number">0</span>, <span class="number">0</span>, width, height, realDisplayDC, <span class="number">0</span>, <span class="number">0</span>, SRCCOPY);</span><br><span class="line">		DoHook(GetModuleHandle(<span class="string">L&quot;gdi32&quot;</span>), <span class="string">&quot;StretchBlt&quot;</span>, MyStretchBlt);</span><br><span class="line">		DoHook(GetModuleHandle(<span class="string">L&quot;gdi32&quot;</span>), <span class="string">&quot;BitBlt&quot;</span>, MyBitBlt);</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">		DeleteDC(realDisplayDC);</span><br><span class="line">		DeleteDC(fakeDisplayDC);</span><br><span class="line">		<span class="keyword">for</span> (<span class="built_in">std</span>::<span class="built_in">pair</span>&lt;PVOID, PVOID&gt; eHook : hookMap) MH_DisableHook(eHook.first);</span><br><span class="line">		MH_Uninitialize();</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	<span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">	<span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+<p><em>这份代码将DLL加载时的屏幕保存，并将以后的截屏内容都替换为保存的内容</em></p>
+<h2 id="0x03-Inject"><a href="#0x03-Inject" class="headerlink" title="0x03 Inject"></a>0x03 Inject</h2><p>DLL已经完成，我们剩下的唯一任务就是把DLL注入到目标进程</p>
+<p>在这里我们将使用QueueUserAPC这个比较稳定的方法进行注入</p>
+<p>当然，注入一个DLL还有很多不同的方法，也许以后我会写一篇博客专门介绍一下</p>
+<details>
+<summary>参考代码</summary>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ByQueueUserAPC</span><span class="params">(PCSTR pszLibFile, DWORD dwProcessId)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">size_t</span> cb = (<span class="built_in">strlen</span>(pszLibFile) + <span class="number">1</span>) * <span class="keyword">sizeof</span>(<span class="keyword">char</span>);</span><br><span class="line"></span><br><span class="line">	HANDLE hProcess = OpenProcess(PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, dwProcessId);</span><br><span class="line">	<span class="keyword">if</span> (hProcess == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: Couldn&#x27;t open process.\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	LPVOID pszLibFileRemote = VirtualAllocEx(hProcess, <span class="literal">NULL</span>, cb, MEM_COMMIT, PAGE_READWRITE);</span><br><span class="line">	<span class="keyword">if</span> (pszLibFileRemote == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: Couldn&#x27;t allocate memory.\n&quot;</span>);</span><br><span class="line">		CloseHandle(hProcess);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	LPVOID pfnThreadRtn = GetProcAddress(GetModuleHandle(TEXT(<span class="string">&quot;Kernel32&quot;</span>)), <span class="string">&quot;LoadLibraryA&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span> (pfnThreadRtn == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: Couldn&#x27;t find LoadLibraryA.\n&quot;</span>);</span><br><span class="line">		CloseHandle(hProcess);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	DWORD n = WriteProcessMemory(hProcess, pszLibFileRemote, pszLibFile, cb, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: Couldn&#x27;t write.\n&quot;</span>);</span><br><span class="line">		CloseHandle(hProcess);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (hSnapshot == INVALID_HANDLE_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: Couldn&#x27;t get thread information.\n&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	DWORD threadId = <span class="number">0</span>;</span><br><span class="line">	THREADENTRY32 threadEntry;</span><br><span class="line">	threadEntry.dwSize = <span class="keyword">sizeof</span>(THREADENTRY32);</span><br><span class="line"></span><br><span class="line">	BOOL least = FALSE;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">list</span>&lt;HANDLE&gt; handles;</span><br><span class="line">	BOOL bResult = Thread32First(hSnapshot, &amp;threadEntry);</span><br><span class="line">	<span class="keyword">while</span> (bResult)</span><br><span class="line">	&#123;</span><br><span class="line">		bResult = Thread32Next(hSnapshot, &amp;threadEntry);</span><br><span class="line">		<span class="keyword">if</span> (bResult)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (threadEntry.th32OwnerProcessID == dwProcessId)</span><br><span class="line">			&#123;</span><br><span class="line">				threadId = threadEntry.th32ThreadID;</span><br><span class="line">				HANDLE hThread = OpenThread(THREAD_SET_CONTEXT | THREAD_SUSPEND_RESUME, FALSE, threadId);</span><br><span class="line">				<span class="keyword">if</span> (hThread == <span class="literal">NULL</span>)</span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					SuspendThread(hThread);</span><br><span class="line">					handles.push_back(hThread);</span><br><span class="line">					Sleep(<span class="number">100</span>);</span><br><span class="line">					DWORD dwResult = QueueUserAPC((PAPCFUNC) pfnThreadRtn, hThread, (ULONG_PTR) pszLibFileRemote);</span><br><span class="line">					<span class="keyword">if</span> (dwResult &amp;&amp; !least)</span><br><span class="line">						least = TRUE;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (HANDLE handle : handles) &#123;</span><br><span class="line">		ResumeThread(handle);</span><br><span class="line">		CloseHandle(handle);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!threadId)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: No threads found.\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(!least)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Error: No threads injected.\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">	CloseHandle(hSnapshot);</span><br><span class="line">	CloseHandle(hProcess);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (argc &lt; <span class="number">3</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	DWORD pid = atol(argv[<span class="number">1</span>]);</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> path;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; argc; ++i) &#123;</span><br><span class="line">		path += argv[i];</span><br><span class="line">		path += <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ByQueueUserAPC(path.c_str(), pid);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+<h2 id="0x04-Test"><a href="#0x04-Test" class="headerlink" title="0x04 Test"></a>0x04 Test</h2><p>至此，我们需要的东西已经准备齐全</p>
+<p>让我们测试一下成果</p>
+<p>打开我们的OBS<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/cFyWTA"><img src="https://z3.ax1x.com/2021/03/30/cFyWTA.png" alt="OBS"></a></p>
+<p>用我们的工具注入一下<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/cF6CXF"><img src="https://z3.ax1x.com/2021/03/30/cF6CXF.png" alt="Inject"></a></p>
+<p>再看我们的OBS，钩子已经挂上，预览画面的时间定格在注入的一刻<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/cF6c90"><img src="https://z3.ax1x.com/2021/03/30/cF6c90.png" alt="Success"></a></p>
+<p>除了OBS的界面显示出了一些问题之外没有什么大问题，还挺不错</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>然而，学校的古老XP系统并不支持我运行这个程序，再加上后来我发现我直接关掉软件老师也不管，于是这东西就没用了(<del>当然，可以用来水博客</del>)</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hook/" rel="tag"># Hook</a>
+              <a href="/tags/%E4%BC%AA%E9%80%A0/" rel="tag"># 伪造</a>
+              <a href="/tags/%E6%88%AA%E5%B1%8F/" rel="tag"># 截屏</a>
+              <a href="/tags/%E5%BD%95%E5%B1%8F/" rel="tag"># 录屏</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/03/14/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-Find"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 Find</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CreateDCA%E5%92%8CCreateDCW%EF%BC%9F"><span class="nav-number">2.1.1.</span> <span class="nav-text">CreateDCA和CreateDCW？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BitBlt%E5%92%8CStretchBlt"><span class="nav-number">2.1.2.</span> <span class="nav-text">BitBlt和StretchBlt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-Hook"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 Hook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Inject"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 Inject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-Test"><span class="nav-number">2.4.</span> <span class="nav-text">0x04 Test</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AF%AD"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">czm</p>
+  <div class="site-description" itemprop="description">写想写的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/czm23333" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;czm23333" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/czm2333@hotmail.com" title="E-Mail → czm2333@hotmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">czm</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '1fcaa908f4ec87eefaba',
+      clientSecret: '85bf78ebfd0610fcbfda9b9f692954fe3251bda5',
+      repo        : 'czm23333.github.io',
+      owner       : 'czm23333',
+      admin       : ['czm23333'],
+      id          : 'dccff8b93fc9ea9962e7a51e92d96e9d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -150,6 +150,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/" class="post-title-link" itemprop="url">[C++][Windows]通过Hook伪造截屏/录屏画面</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-30 21:06:47 / 修改时间：22:36:59" itemprop="dateCreated datePublished" datetime="2021-03-30T21:06:47+08:00">2021-03-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C++</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><em>这个其实是我很长一段时间之前弄的了，不过当时没有发出来(<del>现在发出来水一下博客</del>)</em></p>
+<p>刚开学那会我在学校的某群吹水时，听说了微机室电脑有控制软件可以让老师看屏幕，于是在第一节微机课的前一天晚上连夜弄了一下这个</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="0x01-Find"><a href="#0x01-Find" class="headerlink" title="0x01 Find"></a>0x01 Find</h2><p>想要伪造画面，自然要用到Hook技术，可是要Hook哪里呢？</p>
+<details>
+<summary>这里先贴一段截屏代码供参考</summary>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; &amp;vtData, <span class="keyword">const</span> SIZE &amp;sizeImg)</span></span>;</span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc)</span></span>;</span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc, <span class="keyword">const</span> RECT &amp;rcDC)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; &amp;vtData, <span class="keyword">const</span> SIZE &amp;sizeImg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">	BITMAPINFOHEADER bmInfoHeader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	bmInfoHeader.biSize = <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmInfoHeader.biWidth = sizeImg.cx;</span><br><span class="line">	bmInfoHeader.biHeight = sizeImg.cy;</span><br><span class="line">	bmInfoHeader.biPlanes = <span class="number">1</span>;</span><br><span class="line">	bmInfoHeader.biBitCount = <span class="number">24</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Bimap file header in order to write bmp file</span></span><br><span class="line">	BITMAPFILEHEADER bmFileHeader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	bmFileHeader.bfType = <span class="number">0x4d42</span>;  <span class="comment">//bmp  </span></span><br><span class="line">	bmFileHeader.bfOffBits = <span class="keyword">sizeof</span>(BITMAPFILEHEADER) + <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmFileHeader.bfSize = bmFileHeader.bfOffBits + ((bmInfoHeader.biWidth * bmInfoHeader.biHeight) * <span class="number">3</span>); <span class="comment">///3=(24 / 8)</span></span><br><span class="line"></span><br><span class="line">	HANDLE hFile = CreateFile(strFile.c_str(), GENERIC_WRITE, <span class="number">0</span>, <span class="literal">NULL</span>, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">if</span> (hFile == INVALID_HANDLE_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	DWORD dwWrite = <span class="number">0</span>;</span><br><span class="line">	WriteFile(hFile, &amp;bmFileHeader, <span class="keyword">sizeof</span>(BITMAPFILEHEADER), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line">	WriteFile(hFile, &amp;bmInfoHeader, <span class="keyword">sizeof</span>(BITMAPINFOHEADER), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line">	WriteFile(hFile, &amp;vtData[<span class="number">0</span>], vtData.size(), &amp;dwWrite, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	CloseHandle(hFile);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> iWidth = GetDeviceCaps(hdc, HORZRES);</span><br><span class="line">	<span class="keyword">int</span> iHeight = GetDeviceCaps(hdc, VERTRES);</span><br><span class="line">	RECT rcDC = &#123; <span class="number">0</span>,<span class="number">0</span>,iWidth,iHeight &#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> WriteBmp(strFile, hdc, rcDC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WriteBmp</span><span class="params">(<span class="keyword">const</span> TSTRING &amp;strFile, HDC hdc, <span class="keyword">const</span> RECT &amp;rcDC)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	BOOL bRes = FALSE;</span><br><span class="line">	BITMAPINFO bmpInfo = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	BYTE *pData = <span class="literal">NULL</span>;</span><br><span class="line">	SIZE sizeImg = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	HBITMAP hBmp = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;BYTE&gt; vtData;</span><br><span class="line">	HGDIOBJ hOldObj = <span class="literal">NULL</span>;</span><br><span class="line">	HDC hdcMem = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Initilaize the bitmap information	</span></span><br><span class="line">	bmpInfo.bmiHeader.biSize = <span class="keyword">sizeof</span>(BITMAPINFOHEADER);</span><br><span class="line">	bmpInfo.bmiHeader.biWidth = rcDC.right - rcDC.left;</span><br><span class="line">	bmpInfo.bmiHeader.biHeight = rcDC.bottom - rcDC.top;</span><br><span class="line">	bmpInfo.bmiHeader.biPlanes = <span class="number">1</span>;</span><br><span class="line">	bmpInfo.bmiHeader.biBitCount = <span class="number">24</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Create the compatible DC to get the data</span></span><br><span class="line">	hdcMem = CreateCompatibleDC(hdc);</span><br><span class="line">	<span class="keyword">if</span> (hdcMem == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">goto</span> EXIT;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Get the data from the memory DC	</span></span><br><span class="line">	hBmp = CreateDIBSection(hdcMem, &amp;bmpInfo, DIB_RGB_COLORS, <span class="keyword">reinterpret_cast</span>&lt;VOID **&gt;(&amp;pData), <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span> (hBmp == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">goto</span> EXIT;</span><br><span class="line">	&#125;</span><br><span class="line">	hOldObj = SelectObject(hdcMem, hBmp);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Draw to the memory DC</span></span><br><span class="line">	sizeImg.cx = bmpInfo.bmiHeader.biWidth;</span><br><span class="line">	sizeImg.cy = bmpInfo.bmiHeader.biHeight;</span><br><span class="line">	StretchBlt(hdcMem,</span><br><span class="line">		<span class="number">0</span>,</span><br><span class="line">		<span class="number">0</span>,</span><br><span class="line">		sizeImg.cx,</span><br><span class="line">		sizeImg.cy,</span><br><span class="line">		hdc,</span><br><span class="line">		rcDC.left,</span><br><span class="line">		rcDC.top,</span><br><span class="line">		rcDC.right - rcDC.left + <span class="number">1</span>,</span><br><span class="line">		rcDC.bottom - rcDC.top + <span class="number">1</span>,</span><br><span class="line">		SRCCOPY);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	vtData.resize(sizeImg.cx * sizeImg.cy * <span class="number">3</span>);</span><br><span class="line">	<span class="built_in">memcpy</span>(&amp;vtData[<span class="number">0</span>], pData, vtData.size());</span><br><span class="line">	bRes = WriteBmp(strFile, vtData, sizeImg);</span><br><span class="line"></span><br><span class="line">	SelectObject(hdcMem, hOldObj);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">EXIT:</span><br><span class="line">	<span class="keyword">if</span> (hBmp != <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		DeleteObject(hBmp);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (hdcMem != <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		DeleteDC(hdcMem);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> bRes;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	HDC hdc = GetDC(<span class="number">0</span>);</span><br><span class="line">	HDC hMemDC = CreateCompatibleDC(hdc);</span><br><span class="line">	SelectObject(hMemDC, CreateCompatibleBitmap(hdc, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)));</span><br><span class="line">	BitBlt(hMemDC, <span class="number">0</span>, <span class="number">0</span>, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), hdc, <span class="number">0</span>, <span class="number">0</span>, SRCCOPY);</span><br><span class="line">	WriteBmp(<span class="string">L&quot;directWrite.bmp&quot;</span>, hdc);</span><br><span class="line">	WriteBmp(<span class="string">L&quot;copyWrite.bmp&quot;</span>, hMemDC);</span><br><span class="line">	ReleaseDC(GetActiveWindow(), hdc);</span><br><span class="line">	DeleteDC(hMemDC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</details>
+
+<h3 id="CreateDCA和CreateDCW？"><a href="#CreateDCA和CreateDCW？" class="headerlink" title="CreateDCA和CreateDCW？"></a>CreateDCA和CreateDCW？</h3><p>研究截屏的实现代码，首先可以想到CreateDCA和CreateDCW两个点，把程序拿到的屏幕DC替换掉</p>
+<p>但能够发现，GetDC(0)和GetDC(GetDesktopWindow())也能拿到截屏用的DC，这样我们又多了一个需要Hook的点，并且可能还有更多方法来获得这个DC</p>
+<p>还有，屏幕HDC并不一定只是用来读的，如果替换掉屏幕DC，很可能影响程序的正常显示</p>
+<p>因此，这个Hook点是不能用的</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/03/14/hello-world/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -282,9 +373,17 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
