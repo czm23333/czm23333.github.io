@@ -150,6 +150,97 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/11/07/C-Windows-%E7%A6%81%E7%94%A8%E7%81%AB%E7%BB%92%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/07/C-Windows-%E7%A6%81%E7%94%A8%E7%81%AB%E7%BB%92%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1/" class="post-title-link" itemprop="url">[C][Windows]如何科学地关掉火绒(关闭火绒主防)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-07 21:52:20" itemprop="dateCreated datePublished" datetime="2021-11-07T21:52:20+08:00">2021-11-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-09 23:04:43" itemprop="dateModified" datetime="2021-11-09T23:04:43+08:00">2021-11-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index"><span itemprop="name">C</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为看到洛谷上有人问 <em>怎么用taskkill关掉PopBlock.exe</em></p>
+<p>我就立马去尝试了一下，试了一会发现一堆方法都不行</p>
+<p>我当然服气不了，于是当场花了一晚上整了一下</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="0x01-尝试"><a href="#0x01-尝试" class="headerlink" title="0x01 尝试"></a>0x01 尝试</h2><p>首先，我们先试一下能不能用一些冷门方法钻火绒主防的漏洞</p>
+<p>包括但不限于：排APC调用ExitProcess，内存抹0，劫持线程到无效地址等等</p>
+<p>显然，全都失败了，不然也不会有这篇博文了</p>
+<h2 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h2><p>火绒到底干什么了，为什么我们的方法全都不行？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/11/07/C-Windows-%E7%A6%81%E7%94%A8%E7%81%AB%E7%BB%92%E4%B8%BB%E5%8A%A8%E9%98%B2%E5%BE%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/03/30/C-Windows-%E9%80%9A%E8%BF%87Hook%E4%BC%AA%E9%80%A0%E6%88%AA%E5%B1%8F-%E5%BD%95%E5%B1%8F%E7%94%BB%E9%9D%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -373,16 +464,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
