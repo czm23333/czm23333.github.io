@@ -226,7 +226,6 @@
 <p>还有，屏幕HDC并不一定只是用来读的，如果替换掉屏幕DC，很可能影响程序的正常显示</p>
 <p>因此，这个Hook点是不能用的</p>
 <span id="more"></span>
-
 <h3 id="BitBlt和StretchBlt"><a href="#BitBlt和StretchBlt" class="headerlink" title="BitBlt和StretchBlt"></a>BitBlt和StretchBlt</h3><p>再看一眼，我们可以发现，为了把屏幕DC中内容读出，也就是copy出来，在上面的示例代码中用到了BitBlt和StretchBlt，实际上也就只有这两个API可用</p>
 <p>这两个API的操作方向在参数中又是明确的，我们可以对参数进行确认避免误伤，所以这两个点不失为好的选择</p>
 <h2 id="0x02-Hook"><a href="#0x02-Hook" class="headerlink" title="0x02 Hook"></a>0x02 Hook</h2><p>决定了Hook的点，我们就可以开始Hook了</p>
@@ -457,6 +456,8 @@
 
 
 
+
+  
 
   
 
