@@ -150,6 +150,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2022/02/03/%E5%8C%85%E8%A3%85%E7%BA%B8%E9%97%AE%E9%A2%98-%E9%A2%98%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/03/%E5%8C%85%E8%A3%85%E7%BA%B8%E9%97%AE%E9%A2%98-%E9%A2%98%E8%A7%A3/" class="post-title-link" itemprop="url">包装纸问题 题解</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-02-03 23:36:54 / 修改时间：23:38:59" itemprop="dateCreated datePublished" datetime="2022-02-03T23:36:54+08:00">2022-02-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A2%98%E8%A7%A3/" itemprop="url" rel="index"><span itemprop="name">题解</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em><strong>作者：czm23333</strong></em></p>
+<p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/U201758">题目传送门</a></p>
+<h2 id="题目大意"><a href="#题目大意" class="headerlink" title="题目大意"></a>题目大意</h2><p>给定一个m列n行的网格，给定每行列的宽度，求：</p>
+<ol>
+<li>其中网格矩形的数量</li>
+<li>所有网格矩形的面积和</li>
+</ol>
+<p><em><strong>由于$n, m$同级，以下计算的时间复杂度内均把$n, m$合并</strong></em></p>
+<h2 id="Subtask-0"><a href="#Subtask-0" class="headerlink" title="Subtask 0"></a>Subtask 0</h2><p>枚举每个矩形计算即可，时间复杂度$\Theta (n^4)$</p>
+<h2 id="Subtask-1"><a href="#Subtask-1" class="headerlink" title="Subtask 1"></a>Subtask 1</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/401563131">here</a></p>
+<p>Method #2</p>
+<p>时间复杂度$\Theta (n^2)$</p>
+<h2 id="Subtask-2"><a href="#Subtask-2" class="headerlink" title="Subtask 2"></a>Subtask 2</h2><p>其实在上面的文章的最后一部分有提到正解做法，不过当时并没有仔细想，只是口胡了一下，实际上里面有一些错误。</p>
+<p>在这里再写一下正解做法：</p>
+<p>$N$的算法已经在上面文章里写出，下面只讲$S$算法。</p>
+<p>考虑矩形的一条边，一定是在相应网格轴上由若干条连续线段组成的，而且确定两条边一定能唯一地确定一个矩形。</p>
+<p>大家都学过矩形面积等于长乘宽，不过这里我们要统计所有矩形的面积和，怎么统计呢？自然是每种可能的长乘宽都加起来。</p>
+<p>但是这样就变回Subtask 0的$\Theta (n^4)$算法了，必须优化。</p>
+<p>回忆一下多项式乘法，两个多项式相乘就等于每两项都相乘一次再加起来。实数乘法也没差，多个实数的和与另外一些实数的和相乘就等于每两个数都相乘一次再加起来。</p>
+<p>那么我们就可以枚举每一种长，加起来；再枚举每一种宽，加起来；最后把两个和相乘，就得到了答案。</p>
+<p>但是这样还是$\Theta (n^2)$的，过不了，我们要加速两个求和的过程。</p>
+<p>对于每次求和，我们不再枚举每种可能的长度，而是枚举每一条线段，计算它对整个和的贡献。显然一条线段对和的贡献等于它的长度乘被包含在不同连续线段里的次数。</p>
+<p>这个次数怎么计算呢？</p>
+<p>显然计算长和宽的方法是相同的，所以接下来我们不再区分长和宽。</p>
+<p>我们先考虑有偶数条线段的情况，很明显，贡献次数有对称性，也就是这时候我们只要算半边就行了，另外半边对称过来就好。</p>
+<p>当我们计算从左往右数第$i$条线段$(i \leq \frac n2)$时，稍微观察一下可以得到：</p>
+<p>对于包含$l$条线段的所有连续线段：</p>
+<p>如果$1 \leq l \leq i$，则有$l$条这样的线段会包含第$i$条线段</p>
+<p>如果$i &lt; l \leq n - i$，则有$i$条这样的线段会包含第$i$条线段</p>
+<p>如果$n - i &lt; l$，则有$n - l + 1$条这样的线段会包含第$i$条线段</p>
+<p>写出来就是形如$1, 2, 3, 4, 4, 4, 4, 3, 2, 1$这样的形状，可以发现就是俩等差数列加中间定值一段，可以$\Theta (1)$求和。于是对于每条线段都这样求一次，就能$\Theta (n)$解决问题。</p>
+<p>当有奇数条线段，实际上大部分地方还是没什么区别，可以像偶数条那样算，但是整个序列的中间多出了一个既不在左半边，又不在右半边的玩意儿，所以我们要额外考虑一下这个。</p>
+<p>可以很容易地看出：</p>
+<p>对于包含$l$条线段的所有连续线段：</p>
+<p>如果$1 \leq l \leq i$，则有$l$条这样的线段会包含第$i$条线段</p>
+<p>如果$i &lt; l \leq n$，则有$n - l + 1$条这样的线段会包含第$i$条线段</p>
+<p>写出来就是形如$1, 2, 3, 4, 3, 2, 1$这样的形状，可以发现就是俩等差数列，也可以$\Theta (1)$求和。</p>
+<p>于是我们$\Theta (n)$解决了整个问题。</p>
+<p>然后空间显然可以做到$\Theta (1)$，你可以一边输入一边计算和，最后输出相乘结果即可。</p>
+<p>STD：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> P = <span class="number">1000000007ull</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> inv2;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> inv4;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">sum</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> i)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (i == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> i * (i + <span class="number">1</span>) % P * inv2 % P;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">fastpow</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> base, <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="built_in">exp</span>)</span> </span>&#123;</span><br><span class="line">	base %= P;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> res = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (<span class="built_in">exp</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">exp</span> &amp; <span class="number">1ull</span>) res *= base, res %= P;</span><br><span class="line">		<span class="built_in">exp</span> &gt;&gt;= <span class="number">1u</span>;</span><br><span class="line">		base *= base, base %= P;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	ios::sync_with_stdio(<span class="literal">false</span>);</span><br><span class="line">	<span class="built_in">cin</span>.tie(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	inv2 = fastpow(<span class="number">2</span>, P - <span class="number">2</span>);</span><br><span class="line">	inv4 = fastpow(<span class="number">4</span>, P - <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> c[<span class="number">2</span>];</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; c[<span class="number">0</span>] &gt;&gt; c[<span class="number">1</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> s[<span class="number">2</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">unsigned</span> id = <span class="number">0</span>; id &lt;= <span class="number">1</span>; ++id) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> i = <span class="number">1</span>; i &lt;= c[id]; ++i) &#123;</span><br><span class="line">			<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> tmp;</span><br><span class="line">			<span class="built_in">cin</span> &gt;&gt; tmp;</span><br><span class="line">			tmp %= P;</span><br><span class="line">			<span class="keyword">if</span> (c[id] % <span class="number">2</span> == <span class="number">1</span> &amp;&amp; i == c[id] / <span class="number">2</span> + <span class="number">1</span>) &#123;</span><br><span class="line">				s[id] += (sum(i) + sum(i - <span class="number">1</span>)) % P * tmp % P;</span><br><span class="line">				s[id] %= P;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> ti = i &gt; c[id] / <span class="number">2</span> ? c[id] - i + <span class="number">1</span> : i;</span><br><span class="line">				s[id] += sum(ti) * <span class="number">2</span> % P * tmp % P;</span><br><span class="line">				s[id] %= P;</span><br><span class="line">				s[id] += ti * (c[id] - ti * <span class="number">2</span>) % P * tmp % P;</span><br><span class="line">				s[id] %= P;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; c[<span class="number">0</span>] * c[<span class="number">1</span>] % P * (c[<span class="number">0</span>] + <span class="number">1</span>) % P * (c[<span class="number">1</span>] + <span class="number">1</span>) % P * inv4 % P &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; s[<span class="number">0</span>] * s[<span class="number">1</span>] % P;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2021/11/20/NOIP2021-JX-%E8%BF%B7%E6%83%91%E8%A1%8C%E4%B8%BA%E5%A4%A7%E8%B5%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -552,16 +659,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -596,7 +703,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
