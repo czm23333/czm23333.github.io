@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czm23333.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="第一章 网络及其模型缩写与一些细节以下不包含极其过时且极为冷门的缩写 LAN: Local Area Network，局域网；在小范围内运作的小型高速网络WAN: Wide Area Network，广域网；在更大的区域上运作的网络ISP：Internet Service Provider，互联网服务提供商；为用户提供互联网接入服务的机构OSI：Open System Interconnectio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计网60分指北">
+<meta property="og:url" content="https://czm23333.github.io/2025/01/01/%E8%AE%A1%E7%BD%9160%E5%88%86%E6%8C%87%E5%8C%97/index.html">
+<meta property="og:site_name" content="czm&#39;s Blog">
+<meta property="og:description" content="第一章 网络及其模型缩写与一些细节以下不包含极其过时且极为冷门的缩写 LAN: Local Area Network，局域网；在小范围内运作的小型高速网络WAN: Wide Area Network，广域网；在更大的区域上运作的网络ISP：Internet Service Provider，互联网服务提供商；为用户提供互联网接入服务的机构OSI：Open System Interconnectio">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-01-01T06:06:33.000Z">
+<meta property="article:modified_time" content="2025-01-01T14:54:33.401Z">
+<meta property="article:author" content="czm">
+<meta property="article:tag" content="计网">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://czm23333.github.io/2025/01/01/%E8%AE%A1%E7%BD%9160%E5%88%86%E6%8C%87%E5%8C%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>计网60分指北 | czm's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">czm's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">this.log();</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/czm23333" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2025/01/01/%E8%AE%A1%E7%BD%9160%E5%88%86%E6%8C%87%E5%8C%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          计网60分指北
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2025-01-01 14:06:33 / 修改时间：22:54:33" itemprop="dateCreated datePublished" datetime="2025-01-01T14:06:33+08:00">2025-01-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%8D%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">复习</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="第一章-网络及其模型"><a href="#第一章-网络及其模型" class="headerlink" title="第一章 网络及其模型"></a>第一章 网络及其模型</h1><h2 id="缩写与一些细节"><a href="#缩写与一些细节" class="headerlink" title="缩写与一些细节"></a>缩写与一些细节</h2><p>以下不包含极其过时且极为冷门的缩写</p>
+<p>LAN: Local Area Network，局域网；在小范围内运作的小型高速网络<br>WAN: Wide Area Network，广域网；在更大的区域上运作的网络<br>ISP：Internet Service Provider，互联网服务提供商；为用户提供互联网接入服务的机构<br>OSI：Open System Interconnection，开放系统互联<br><span id="more"></span></p>
+<h3 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h3><p>FTP：File Transfer Protocol，文件传输协议；用于传输文件的应用层协议（基于TCP；使用两个端口，控制端口21，数据端口20）<br>TFTP：Trivial File Transfer Protocol，简单文件传输协议；FTP的简化版（基于UDP，使用端口69）<br>HTTP：Hypertext Transfer Protocol，超文本传输协议；用于传输超文本内容的应用层协议（基于TCP，但协议本身无状态；使用端口80）<br>DNS：Domain Name System，域名系统；用于进行从域名到IP地址转换的系统与应用层协议（基于UDP，使用端口53）<br>DHCP：Dynamic Host Configuration Protocol，动态主机配置协议；用于自动配置网络中主机的IP地址的应用层协议（基于UDP）<br>BOOTP：Bootstrap Protocol，引导协议；DHCP的前身，与其作用基本相同（过时，基于UDP）<br>NTP：Network Time Protocol，网络时间协议；用于在网络上进行精确的时间同步的应用层协议（基于UDP）<br>POP3：Post Office Protocol 3，邮局协议第三版；用于提供邮件服务的应用层协议（基于TCP，使用端口110）<br>SMTP：Simple Mail Transfer Protocol，简单邮件传输协议；也是用于提供邮件服务的应用层协议（基于TCP，使用端口25）<br>SNMP：Simple Network Management Protocol，简单网络管理协议；用于支持网络管理系统的应用层协议（基于TCP，使用端口161）  </p>
+<h3 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h3><p>TLS：Transport Layer Security，传输层安全协议；用于提供透明加密通信的会话层协议<br>RPC：Remote Procedure Call，远程过程调用；在一台计算机的程序上通过网络远程地调用另一台机器上的程序。注意，课件上RPC对应了RFC给出的一个叫Remote Procedure Call protocol的协议，但缩写RPC早就不对应这一特定协议而对应一种概念了，现在这个协议被叫做ONC RPC（Open Network Computing Remote Procedure Call）或者Sun RPC（协议最早源自Sun微系统）而不是RPC  </p>
+<h3 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h3><p>TCP：Transmission Control Protocol，传输控制协议；用于提供可靠的有连接传输的传输层协议<br>UDP：User Datagram Protocol，用户数据报协议；用于提供不可靠的无连接传输的传输层协议  </p>
+<h3 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h3><p>OSPF：Open Shortest Path First，开放最短路径优先协议；一种link-state网络层动态路由协议<br>ICMP：Internet Control Message Protocol，互联网控制消息协议；用于传递控制消息，检查网络状态的网络层协议<br>IP：Internet Protocol，互联网协议；网络层通信协议，通过地址支持路由功能<br>RIP：Routing Information Protocol，路由信息协议；一种distance-vector网络层动态路由协议  </p>
+<h3 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h3><p>ARP：Address Resolution Protocol，地址解析协议；用于从IP地址获得MAC地址的数据链路层协议<br>RARP：Reverse Address Resolution Protocol，逆向地址解析协议；用于从MAC地址获得IP地址的数据链路层协议。与ARP不同，这一协议不是用于通信的，而是像DHCP一样用于自动配置主机IP地址的（过时）<br>L2TP：Layer Two Tunneling Protocol，第二层隧道协议；用于建立虚拟专用网的数据链路层协议<br>PPTP：Point to Point Tunneling Protocol，点对点隧道协议；用途同L2TP  </p>
+<h2 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h2><h3 id="OSI模型"><a href="#OSI模型" class="headerlink" title="OSI模型"></a>OSI模型</h3><p>分为七层，从上到下依次为：应用层，表示层，会话层，传输层，网络层，数据链路层，物理层</p>
+<p>物理层（physical）：关于信号在媒介中如何传输，发送单元是位元（bit）</p>
+<p>数据链路层（data link）：对于物理层媒介访问的封装，发送单元是帧（frame）</p>
+<p>网络层（network）：提供路由、路径选择、地址配置相关功能，发送单元是包（packet）</p>
+<p>传输层（transport）：提供数据传输中可靠性、拥塞控制等功能，发送单元是数据段（segment）</p>
+<p>会话层（session）：提供会话的建立、管理、终止等功能</p>
+<p>表示层（presentation）：提供对于数据格式的确认、转换与解析</p>
+<p>应用层（application）：为用户程序提供具体需要的功能</p>
+<h3 id="TCP-IP模型"><a href="#TCP-IP模型" class="headerlink" title="TCP/IP模型"></a>TCP/IP模型</h3><p>简化为四层：应用（application）层（对应OSI中最高三层），传输（transport）层（TCP、UDP，对应OSI中传输层），互联网（internet）层（IP，对应OSI中网络层），网络访问（network access）层（Internet等，对应OSI中最底两层）</p>
+<h2 id="网络拓扑"><a href="#网络拓扑" class="headerlink" title="网络拓扑"></a>网络拓扑</h2><p>总线，星，环，双环，树，完全</p>
+<p>形状和名字一样，内容简单</p>
+<h2 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h2><p>网卡（NIC）：第二层设备，有唯一MAC地址，生成与接收帧</p>
+<p>中继器（repeater）：第一层设备，重新生成线路上的信号，使其传播到更远的地方</p>
+<p>集线器（hub）：第一层设备，在所有其他接口上重新生成接收到的信号，相当于把不同接口上的线全部串起来</p>
+<p>网桥（bridge）：第二层设备，智能地学习不同MAC地址对应的接口，并转发数据帧到相应的接口，可以分割冲突域</p>
+<p>交换机（switch）：第二层设备，作用同网桥，但是硬件实现转发且支持cutting-through（检查完帧头部就转发），效率更高</p>
+<p>路由器（Router）：第三层设备，基于网络地址进行路由</p>
+<p>主机是特殊的网络设备，工作于所有层次</p>
+<h1 id="第二章-物理层"><a href="#第二章-物理层" class="headerlink" title="第二章 物理层"></a>第二章 物理层</h1><h2 id="局域网使用的网络介质"><a href="#局域网使用的网络介质" class="headerlink" title="局域网使用的网络介质"></a>局域网使用的网络介质</h2><p>UTP：Unshielded Twisted Pair，无屏蔽双绞线，便宜但抗干扰能力弱。UTP分若干类，有一（语音）、二（1MHz,4Mbps）、三（16MHz,10Mbps）、四（20MHz,16Mbps）、五（100/1000Mbps）、超五（1000Mbps）、六（1Gbps）和七类（10Gbps）</p>
+<p>STP：Shielded Twisted Pair，屏蔽双绞线，外部有屏蔽层，抗干扰能力强；不过传输距离仍然不长</p>
+<p>Coaxial cable，同轴电缆，更贵一些但传输距离长</p>
+<p>Fiber optic，光纤，最贵，不受电磁干扰，传输距离长。光纤分单模多模，单模光纤中只传一束光沿着光纤行进，多模光纤中有多束光从不同角度射入，并在光纤中不断反射</p>
+<p>无线技术：Lasers（激光），Infrared（红外），Radio（电磁波）</p>
+<h2 id="线缆编织类型"><a href="#线缆编织类型" class="headerlink" title="线缆编织类型"></a>线缆编织类型</h2><p>Straight Cable，直通线，连工作在不同层的设备</p>
+<p>Crossover Cable，交叉线，连工作在同层的设备</p>
+<p>Rollover Cable，连Console口</p>
+<h2 id="冲突域"><a href="#冲突域" class="headerlink" title="冲突域"></a>冲突域</h2><p>Collision，冲突，发生在网络上有两个设备同时发出信号的时候</p>
+<p>Collision domain，冲突域，冲突可能发生的一个区域（不要与广播域混淆）</p>
+<p>工作在数据链路层及以上的设备可以分割冲突域</p>
+<h2 id="数据通信"><a href="#数据通信" class="headerlink" title="数据通信"></a>数据通信</h2><h3 id="理论极限"><a href="#理论极限" class="headerlink" title="理论极限"></a>理论极限</h3><p>无噪声：$C=W \log_2 L$ bps，$C$为信道带宽，$W$为信道频率，$L$为信道码元数量</p>
+<p>有高斯白噪声：$C=W \log_2 (1+\frac{S}{N})$ bps，$S$为信号平均功率，$N$为高斯噪声功率，$\frac{S}{N}$称为信噪比</p>
+<h3 id="数字信号的发送"><a href="#数字信号的发送" class="headerlink" title="数字信号的发送"></a>数字信号的发送</h3><p>基带传输：直接发送基带数字信号，使用的频率成分较宽，对介质有要求</p>
+<p>调幅：将数字信号编码到模拟信号的振幅变化</p>
+<p>调频：将数字信号编码到模拟信号的频率变化</p>
+<p>调相：将数字信号编码到模拟信号的相位变化</p>
+<h3 id="数字数据转换到数字信号"><a href="#数字数据转换到数字信号" class="headerlink" title="数字数据转换到数字信号"></a>数字数据转换到数字信号</h3><p>单极性编码：0电平表示0，正电平表示1</p>
+<p>不归零电平编码：正电平表示1，负电平表示0</p>
+<p>不归零反相编码：电平翻转表示1，不翻转表示0</p>
+<p>归零编码：正电平表示1，负电平表示0，比特中位回到零电平</p>
+<p>曼彻斯特码：比特开始时电平到对应位置；比特中位从高跳到低表示1，从低跳到高表示0</p>
+<p>差分曼彻斯特码：比特开始时跳变表示0，不跳变表示1；比特中位跳变一次</p>
+<p>双极性传号交替反转码：0电平表示0，正负电平表示1，正负电平交替使用</p>
+<h3 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h3><p>时分复用：将时间固定分成时间片，分别给不同用户使用</p>
+<p>统计时分复用：每段时间中统计正在使用的用户，只为当前正在使用的用户分配时间片</p>
+<p>频分复用：不同用户使用不同频率</p>
+<p>波分复用：光的频分复用，不同用户使用不同波长</p>
+<p>码分复用：设计一组互不干扰的编码，不同用户使用使用其中不同的编码</p>
+<h1 id="第三章-数据链路层"><a href="#第三章-数据链路层" class="headerlink" title="第三章 数据链路层"></a>第三章 数据链路层</h1><h2 id="介质访问控制"><a href="#介质访问控制" class="headerlink" title="介质访问控制"></a>介质访问控制</h2><p>确定性：Token Ring与FDDI，设备交替使用介质</p>
+<p>非确定性：Ethernet 802.3，使用CSMA/CD来控制介质访问</p>
+<h2 id="802-3"><a href="#802-3" class="headerlink" title="802.3"></a>802.3</h2><p>CSMA/CD：Carrier Sense Multiple Access with Collision Detection，载波侦听/碰撞检测。监听信道，等待信道空闲，空闲后开始发送并且保持监听，如果发送过程中发生碰撞，取消信息发送并发送JAM信号，重新等待一段时间再尝试发送</p>
+<p>分两个子层MAC（Media Access Control，媒介访问控制，靠近物理层）与LLC（Logical Link Control，逻辑链路控制，靠近网络层）</p>
+<p>MAC地址：6字节，前三个字节标识设备生产商，后三个字节标识设备</p>
+<p>MAC子层格式：8字节开头序列（提醒设备有帧到达），6字节目标MAC地址，6字节源MAC地址，2字节数据区长度（以byte为单位），数据，4字节CRC校验和。注意目标地址在前，源地址在后</p>
+<p>MAC广播：目标地址设为二进制全1</p>
+<h2 id="802-11"><a href="#802-11" class="headerlink" title="802.11"></a>802.11</h2><p>AP：Access Point，接入点，为外部设备提供网络接入服务的设备<br>BS：Base Station，基站，无线网络的中心设备<br>BSS：Base Service Set，基本服务集，包含基站在内的一个无线网络的所有服务设备构成的单位<br>SSID：Service Set Identifier，服务集标识符，用于标识一个特定的服务集</p>
+<p>802.11帧中有四个MAC地址，其中第四个留作自组网络；还有去往AP和来自AP两个标识。当包来自AP时，第一个地址是包的目的地址，第二个地址是AP地址，第三个地址是包的源地址；当包去往AP时，第一个地址是包的源地址，第二个地址是AP地址，第三个地址是包的目的地址</p>
+<p>扫描：主动扫描（主机主动发送一个请求，包含其希望连接的网络的SSID，对应网络的节点收到后回复），被动扫描（无线网络的节点不断广播包含网络SSID的信标包，主机收到后再加入网络）</p>
+<p>与802.3不同，802.11对于介质的访问使用CSMA/CA：Carrier Sence Multiple Access with Collsion Avoidance，载波侦听/碰撞避免。监听信道，等待信道空闲，空闲后向目标发送RTS（Request To Send）包，周围其他设备监听到RTS包后一段时间不发送信息；目标收到RTS后回复CTS（Clear To Send）包，其他设备监听到CTS包后也一段时间不发送消息；若这一过程中发生任何碰撞，发送取消，使用二进制指数后退算法计算等待时间，等待一段时间后再重试。若这一过程顺利完成，便可开始发送信息，这时理应不会发生碰撞（双方周围设备都暂时不发送消息）</p>
+<h1 id="第四章-网络层"><a href="#第四章-网络层" class="headerlink" title="第四章 网络层"></a>第四章 网络层</h1><h2 id="IP报文头"><a href="#IP报文头" class="headerlink" title="IP报文头"></a>IP报文头</h2><p>总长度：报文头与数据的总长度（以byte为单位）</p>
+<p>标识：记录分片报文所属的原始报文，之后依据标识重组同一组的分片报文</p>
+<p>片偏移：记录该分片报文的内容在原始报文内容中的位置偏移（以8 bytes为单位）</p>
+<p>TTL（Time To Live）：标识该报文最多还能被路由器转发几次</p>
+<p>协议：标识报文内容对应的协议</p>
+<p>首部校验和：对IP报文头的校验和</p>
+<p>源地址与目的地址：无需解释</p>
+<h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><h3 id="地址类别"><a href="#地址类别" class="headerlink" title="地址类别"></a>地址类别</h3><p>IPv4地址长为4 bytes，分为五类</p>
+<p>A类：第一个byte以0开头，对应子网掩码为255.0.0.0</p>
+<p>B类：第一个byte以10开头，对应子网掩码为255.255.0.0</p>
+<p>C类：第一个byte以110开头，对应子网掩码为255.255.255.0</p>
+<p>D类：第一个byte以1110开头，仅用作多播</p>
+<p>E类：第一个byte以11110开头，仅用作研究</p>
+<p>每一个网络中，主机号为0的地址被留作网络地址，主机号为二进制全1的地址被留作广播地址，不能分配给主机</p>
+<p>此外，有一些地址被保留，用于私有地址分配，分别为10.*.*.*，172.[16~31].*.*，192.168.*.*</p>
+<h3 id="可变长度子网掩码"><a href="#可变长度子网掩码" class="headerlink" title="可变长度子网掩码"></a>可变长度子网掩码</h3><p>由类别来固定长度的子网掩码并不灵活，很容易造成IP地址浪费。为此，我们使用CIDR与VLSM来更灵活地划分网络</p>
+<p>CIDR：Classless Inter-Domain Routing，无类别域间路由，即路由器不跟据IP地址的类别而是根据我们预先设置的子网掩码来确定网络<br>VLSM：Variable-Length Subnet Mask，可变长度子网掩码，即不使用固定的子网掩码长度，而是根据需要借位，灵活地调整网络的划分粒度</p>
+<p>使用VLSM，在通过地址类别确定的子网掩码长度的基础上，可以再从主机号中借若干位作为网络号的一部分。不过按照一般约定，借过来的这几位不能全填0（除非明确说明允许全0子网），也不能全填1，因此借$k$位只能划分出原来$2^k-2$倍的网络</p>
+<p>更进一步地，使用VLSM，我们可以先借若干位主机号划出一些网络，对于其中的一些网络再进行二次划分，如此进行，直到满足各种粒度的网络需求。再通过CIDR，我们还可以用自定义的子网掩码把这些划分得细小的网络重新合并在一起，进行大规模的路由。如此，我们可以灵活地设置网络</p>
+<h2 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h2><p>向同一个网络中的主机发送IP报文时，我们知道目的IP地址，但并不一定知道目的MAC地址。在这样的情况下，我们是无法生成以太网帧的。此时就需要使用ARP协议从IP地址获取MAC地址</p>
+<p>过程：发送方广播ARP Request帧，在其中带上接收方的IP地址；接收方收到ARP Request后，发现其中的IP地址和自己一样，便回复一个ARP Reply，在其中带上自己的MAC地址；发送方收到ARP Reply后，将其中的MAC地址与接收方IP地址关联起来，存储在ARP缓存中，之后发送数据时便可以从缓存中找到MAC地址</p>
+<p>变种：代理ARP，查询不在当前网络中的IP地址时由路由器代为回答，此后路由器作为通信代理</p>
+<h2 id="动态路由协议"><a href="#动态路由协议" class="headerlink" title="动态路由协议"></a>动态路由协议</h2><p>按工作尺度分类：IGP（Interior Gateway Protocol，内部网关协议，用于自治系统内部路由的一类协议）与EGP（Exterior Gateway Protocol，外部网关协议，用于维护自治系统间路由的协议）</p>
+<p>按工作原理分类：DVP（Distance Vector Protocol，距离矢量协议，通过邻居之间定期交换从各自出发的路由来让每个设备获知路由信息，如RIP）与LSP（Link State Protocol，链路状态协议，通过启动时各设备之间充分的交流与持续的同步来让所有设备准确获知网络的整个拓扑，以此确定路由方式，如OSPF）</p>
+<h2 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h2><p>ICMP报文封装在IP报文内，其中前四个字节分别为一字节类型，一字节代码，两字节校验和</p>
+<p>当IP报文未能成功发送，路由器或主机可以回复ICMP差错报文，不过对于发向多播地址或特殊地址（如127.0.0.1与0.0.0.0）的报文，已经发送过差错报文的数据报文的其他分片和未发送成功的差错报文不会再发送差错报文</p>
+<h1 id="第五章-传输层"><a href="#第五章-传输层" class="headerlink" title="第五章 传输层"></a>第五章 传输层</h1><h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><h3 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h3><p>源端口，目的端口：无需说明</p>
+<p>序号：本报文段发送的第一个字节的编号</p>
+<p>确认号：期望对方发送的下一个字节的序号</p>
+<p>数据偏移：数据离报文段开头的偏移（以4 bytes为单位，因此TCP报文头的大小要填充到4 bytes的整数倍）</p>
+<p>标志位：URG（指示报文段带有紧急消息），ACK（对收到的信息进行确认），PSH（指示将已收到的消息尽快交给应用程序），RST（指示连接出现重大问题，强行关闭），SYN（指示建立连接），FIN（指示关闭连接）</p>
+<p>窗口：希望对方设置发送窗口的大小（以byte为单位）</p>
+<p>校验和：对整个报文段的校验和</p>
+<p>紧急指针：指示紧急数据的大小（以byte为单位）</p>
+<p>关于序号和确认号，还有一点需要注意：发送标志位中带SYN或FIN的包时，也视为发送了1 byte，序号和确认号要对应地改变</p>
+<h3 id="连接建立"><a href="#连接建立" class="headerlink" title="连接建立"></a>连接建立</h3><p>需要三次握手：<br>C-&gt;S SYN<br>C&lt;-S SYN+ACK<br>C-&gt;S ACK</p>
+<h3 id="数据传输"><a href="#数据传输" class="headerlink" title="数据传输"></a>数据传输</h3><p>TCP的数据确认采用区间确认，每个ACK包都代表直到其确认号之前的所有数据都已经传输完成</p>
+<p>发送时使用滑动窗口，发送方允许发送窗口范围内所有待发送的数据，收到确认后把窗口后移继续发送新数据，不断持续。过程中窗口大小可以被设置了窗口值的数据包改变</p>
+<h3 id="连接终止"><a href="#连接终止" class="headerlink" title="连接终止"></a>连接终止</h3><p>总共四次握手：<br>C-&gt;S FIN<br>C&lt;-S ACK<br>C停止发送信息，S继续发送剩余信息<br>C&lt;-S FIN+ACK<br>C-&gt;S ACK<br>C再等待一会，以避免最后的ACK未送达，之后连接终止</p>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>简单，无连接，无可靠性保证</p>
+<p>格式：2字节源端口，2字节目标端口，2字节整个报文段长度（以byte为单位），2字节校验和，数据</p>
+<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>将内部地址转换到外部地址，以与外部网络进行通信，可静态可动态</p>
+<p>变种：PAT，允许将多个内部地址转换到一个外部地址，但使用不同的端口与外界进行通信</p>
+<h1 id="第六章-应用层"><a href="#第六章-应用层" class="headerlink" title="第六章 应用层"></a>第六章 应用层</h1><p>实质内容极少，有一些缩写与细节</p>
+<p>ASCII，American Standard Code for Information Interchange，美国信息交换标准代码；一套计算机字符编码标准<br>GIF，Graphic Interchange Format，图像互换格式；一种位图文件格式<br>JPEG，Joint Photographic Experts Group，联合图像专家小组；由这一专家组开发的一种有损压缩图像格式<br>URL，Uniform Resource Locator，统一资源定位符；一种统一的标示资源位置的地址形式<br>HTML，Hypertext Markup Language，超文本标记语言；编写网页使用的一种标记语言<br>Telnet，一种用于提供虚拟终端的应用层协议（基于TCP，使用端口23）<br>TLD，Top Level Domain，顶级域名；DNS中位于根域空间的最高级域名</p>
+<h1 id="第七章-路由与路由器"><a href="#第七章-路由与路由器" class="headerlink" title="第七章 路由与路由器"></a>第七章 路由与路由器</h1><p>主要是实验有关内容，不再重复</p>
+<p>关于DVP，有一重要问题counting to infinity，指网络中一个连接断开后，如果剩下的部分中有环路，使用DVP的路由器们会沿着环路不断传递被断开的连接对应的虚假路由，尽管被断开的连接已经无法到达，但虚假路由仍会不断传递直到其中距离为无穷</p>
+<p>解决方案：设置距离上限（距离到一定大小直接视为无穷，不可到达）、抑制计时（当一个路由变得不可达，在随后一定时间内忽略其重新变得可达的信息）、路由投毒（当一个路由变得不可达，立刻向相连的设备发送一个投毒路由，指示当前节点这一路由已经不可到达）、分割视野与反向投毒（对于一条路由的下一跳设备，与其交换路由信息时不提供这一条路由的信息/提供这一条路由不可达的信息，防止连接断开后下一跳设备的路由被当前设备的路由污染）</p>
+<h1 id="第八章-RIP与OSPF"><a href="#第八章-RIP与OSPF" class="headerlink" title="第八章 RIP与OSPF"></a>第八章 RIP与OSPF</h1><h2 id="RIP"><a href="#RIP" class="headerlink" title="RIP"></a>RIP</h2><p>RIP没有新内容，不赘述，需要知道其不支持VLSM</p>
+<h2 id="OSPF"><a href="#OSPF" class="headerlink" title="OSPF"></a>OSPF</h2><p>OSPF的网络是分区域的，其中Area 0是骨干（backbone）区域，其他所有区域都要直接连接到这一区域（或者通过虚拟链路连接）</p>
+<p>首先，设备通过OSPF Hello包发现邻居</p>
+<p>然后，在非点对点网络中，OSPF会选出DR（Designated Router）与BDR（Backup Designated Router）作为路由维护的主持者。选举首先考虑优先级，优先级最高的当选；若优先级相同，比较Router ID，Router ID最高的当选。Router ID为所有回环接口（或所有物理接口，如果没有回环接口的话）上的IP地址中最高的一个。新设备的加入不会改变已选举的DR与BDR，只会参与之后再发生的选举</p>
+<p>随后，设备与邻居设备交换选举结果，所有设备和DR与BDR交换链路信息以建立完全邻接关系</p>
+<p>在所有设备取得完整链路信息之后，运行算法确定最适路由</p>
+<p>至此，初始化完成，之后只需要在发生链路状态更新的时候同步</p>
+<h1 id="第九章-局域网交换与VLAN"><a href="#第九章-局域网交换与VLAN" class="headerlink" title="第九章 局域网交换与VLAN"></a>第九章 局域网交换与VLAN</h1><h2 id="STP"><a href="#STP" class="headerlink" title="STP"></a>STP</h2><p>为避免循环转发，交换机也需要一个协议来维护交换机路径生成树，这一协议就是STP，Spanning-Tree Protocol</p>
+<p>首先STP选举一个root bridge，选举根据Bridge ID进行。Bridge ID共8字节，其最高的2字节为优先级，剩下6字节为交换机的MAC地址，Bridge ID最低者赢得选举</p>
+<p>然后，剩下的所有交换机选出一个root port，要求这一接口到root bridge的路径代价最小，该接口用于交换机与root bridge通信</p>
+<p>最后，对于交换机分割出的所有网段，各选出一个designated port，同样要求到root bridge的路径代价最小，该接口用于网段与root bridge通信</p>
+<p>剩下的所有接口被屏蔽，不收发任何信息</p>
+<p>如此，便选出了一个生成树，可以用于进行帧的转发</p>
+<h2 id="VLAN"><a href="#VLAN" class="headerlink" title="VLAN"></a>VLAN</h2><p>实验内容已经覆盖，不再赘述，需要VLAN的实现为帧过滤或者帧标记</p>
+<h1 id="第十章-广域网"><a href="#第十章-广域网" class="headerlink" title="第十章 广域网"></a>第十章 广域网</h1><p>数据链路层封装：PPP（Point-to-Point Protocol，点对点协议，用于两点间直接通信的协议）、HDLC、Frame Relay、ISDN、LAPB</p>
+<h2 id="PPP"><a href="#PPP" class="headerlink" title="PPP"></a>PPP</h2><p>使用LCP（Link Control Protocol）初始化链路并测试连接质量，再用NCP（Network Control Protocol）设定网络层协议，关闭链路时也使用LCP</p>
+<p>身份验证：PAP（Password Authentication Protocol，密码认证协议，使用明文在链路上发送用户名与密码进行身份认证）、CHAP（Challenge Handshake Authentication Protocol，质询握手认证协议，将用户名密码与host段生成的随机挑战字符串一起加密后发送进行身份认证）</p>
+<h2 id="ISDN"><a href="#ISDN" class="headerlink" title="ISDN"></a>ISDN</h2><p>服务分两种：BRI（Basic Rate Interface）、PRI（Primary Rate Interface）</p>
+<p>BRI有两个B频道和一个D频道，其中B频道支持64Kbps（用于传输数据），D频道支持16Kbps（用于传输指令），三个频道总计144Kbps</p>
+<p>PRI有23或30个B频道和一个D频道</p>
+<h2 id="xDSL"><a href="#xDSL" class="headerlink" title="xDSL"></a>xDSL</h2><p>DSL：Digital Subscriber Line，数字用户线；在模拟电话线上进行改造使其传递数字信息</p>
+<p>ADSL中A为Asymmetric，非对称用户数字线上下行不对等</p>
+<h2 id="SONET"><a href="#SONET" class="headerlink" title="SONET"></a>SONET</h2><p>SONET：Synchronous Optical Network，同步光纤网；使用同步传输的光纤网络</p>
+<p>其中第一级同步传送信号STS-1（Synchronous Transport Signal）的传输速率是51.84Mbps</p>
+<p>SDH：Synchronous Digital Hierarchy，同步数字系列；SONET的同义词</p>
+<p>SDH的基本速率为155.52 Mbps，称为第一级同步传递模块(Synchronous Transfer Module)，即STM-1，相当于SONET中的STS-3</p>
+<p>STS-x的传输速率是STS-1的x倍</p>
+<h1 id="第十一章-网络安全"><a href="#第十一章-网络安全" class="headerlink" title="第十一章 网络安全"></a>第十一章 网络安全</h1><p>加密不考，ACL被实验内容覆盖，不赘述</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%BD%91/" rel="tag"># 计网</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/12/%E5%9C%B0%E7%90%8318%E5%B9%B4%E6%B8%B8%E8%AE%B0/" rel="prev" title="地球18年游记">
+      <i class="fa fa-chevron-left"></i> 地球18年游记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%8F%8A%E5%85%B6%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">第一章 网络及其模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%A9%E5%86%99%E4%B8%8E%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82"><span class="nav-number">1.1.</span> <span class="nav-text">缩写与一些细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E5%B1%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">会话层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">1.1.3.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">1.1.4.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">1.1.5.</span> <span class="nav-text">数据链路层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.</span> <span class="nav-text">网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OSI%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.1.</span> <span class="nav-text">OSI模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.2.2.</span> <span class="nav-text">TCP&#x2F;IP模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%8B%93%E6%89%91"><span class="nav-number">1.3.</span> <span class="nav-text">网络拓扑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87"><span class="nav-number">1.4.</span> <span class="nav-text">网络设备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%89%A9%E7%90%86%E5%B1%82"><span class="nav-number">2.</span> <span class="nav-text">第二章 物理层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E5%9F%9F%E7%BD%91%E4%BD%BF%E7%94%A8%E7%9A%84%E7%BD%91%E7%BB%9C%E4%BB%8B%E8%B4%A8"><span class="nav-number">2.1.</span> <span class="nav-text">局域网使用的网络介质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%BC%86%E7%BC%96%E7%BB%87%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">线缆编织类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%B2%E7%AA%81%E5%9F%9F"><span class="nav-number">2.3.</span> <span class="nav-text">冲突域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%80%9A%E4%BF%A1"><span class="nav-number">2.4.</span> <span class="nav-text">数据通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E6%9E%81%E9%99%90"><span class="nav-number">2.4.1.</span> <span class="nav-text">理论极限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E7%9A%84%E5%8F%91%E9%80%81"><span class="nav-number">2.4.2.</span> <span class="nav-text">数字信号的发送</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E6%95%B0%E6%8D%AE%E8%BD%AC%E6%8D%A2%E5%88%B0%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7"><span class="nav-number">2.4.3.</span> <span class="nav-text">数字数据转换到数字信号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8"><span class="nav-number">2.4.4.</span> <span class="nav-text">多路复用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">3.</span> <span class="nav-text">第三章 数据链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8B%E8%B4%A8%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6"><span class="nav-number">3.1.</span> <span class="nav-text">介质访问控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#802-3"><span class="nav-number">3.2.</span> <span class="nav-text">802.3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#802-11"><span class="nav-number">3.3.</span> <span class="nav-text">802.11</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">4.</span> <span class="nav-text">第四章 网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E6%8A%A5%E6%96%87%E5%A4%B4"><span class="nav-number">4.1.</span> <span class="nav-text">IP报文头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80"><span class="nav-number">4.2.</span> <span class="nav-text">IP地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E7%B1%BB%E5%88%AB"><span class="nav-number">4.2.1.</span> <span class="nav-text">地址类别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E5%8F%98%E9%95%BF%E5%BA%A6%E5%AD%90%E7%BD%91%E6%8E%A9%E7%A0%81"><span class="nav-number">4.2.2.</span> <span class="nav-text">可变长度子网掩码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP"><span class="nav-number">4.3.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.4.</span> <span class="nav-text">动态路由协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ICMP"><span class="nav-number">4.5.</span> <span class="nav-text">ICMP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E4%BC%A0%E8%BE%93%E5%B1%82"><span class="nav-number">5.</span> <span class="nav-text">第五章 传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP"><span class="nav-number">5.1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F"><span class="nav-number">5.1.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B"><span class="nav-number">5.1.2.</span> <span class="nav-text">连接建立</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93"><span class="nav-number">5.1.3.</span> <span class="nav-text">数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E7%BB%88%E6%AD%A2"><span class="nav-number">5.1.4.</span> <span class="nav-text">连接终止</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">5.2.</span> <span class="nav-text">UDP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAT"><span class="nav-number">5.3.</span> <span class="nav-text">NAT</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">6.</span> <span class="nav-text">第六章 应用层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B8%83%E7%AB%A0-%E8%B7%AF%E7%94%B1%E4%B8%8E%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="nav-number">7.</span> <span class="nav-text">第七章 路由与路由器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%85%AB%E7%AB%A0-RIP%E4%B8%8EOSPF"><span class="nav-number">8.</span> <span class="nav-text">第八章 RIP与OSPF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RIP"><span class="nav-number">8.1.</span> <span class="nav-text">RIP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSPF"><span class="nav-number">8.2.</span> <span class="nav-text">OSPF</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%B1%80%E5%9F%9F%E7%BD%91%E4%BA%A4%E6%8D%A2%E4%B8%8EVLAN"><span class="nav-number">9.</span> <span class="nav-text">第九章 局域网交换与VLAN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#STP"><span class="nav-number">9.1.</span> <span class="nav-text">STP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VLAN"><span class="nav-number">9.2.</span> <span class="nav-text">VLAN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%8D%81%E7%AB%A0-%E5%B9%BF%E5%9F%9F%E7%BD%91"><span class="nav-number">10.</span> <span class="nav-text">第十章 广域网</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PPP"><span class="nav-number">10.1.</span> <span class="nav-text">PPP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ISDN"><span class="nav-number">10.2.</span> <span class="nav-text">ISDN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xDSL"><span class="nav-number">10.3.</span> <span class="nav-text">xDSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SONET"><span class="nav-number">10.4.</span> <span class="nav-text">SONET</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8"><span class="nav-number">11.</span> <span class="nav-text">第十一章 网络安全</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">czm</p>
+  <div class="site-description" itemprop="description">写想写的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/czm23333" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;czm23333" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/czm2333@hotmail.com" title="E-Mail → czm2333@hotmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">czm</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '1fcaa908f4ec87eefaba',
+      clientSecret: '85bf78ebfd0610fcbfda9b9f692954fe3251bda5',
+      repo        : 'czm23333.github.io',
+      owner       : 'czm23333',
+      admin       : ['czm23333'],
+      id          : '870b5543ddacc1568f894b035cb54f4f',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
