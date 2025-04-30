@@ -181,7 +181,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-04-30 14:23:27" itemprop="dateModified" datetime="2025-04-30T14:23:27+08:00">2025-04-30</time>
+                <time title="修改时间：2025-04-30 14:26:33" itemprop="dateModified" datetime="2025-04-30T14:26:33+08:00">2025-04-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -205,53 +205,14 @@
 
       
           <h1 id="题设"><a href="#题设" class="headerlink" title="题设"></a>题设</h1><p>买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i=1$。</p>
-<h1 id="1"><a href="#1" class="headerlink" title="1"></a>1</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>$\operatorname{E}\left(b\right) &gt; 0, b_i \text{有界}$</p>
-<p>现在重复购买直到拥有至少$k$瓶饮料时停下，记最后总共花了$A$元，得到了$B$瓶饮料，求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
-<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><p>买饮料的过程是一个Renewal Process，记最后在第$N_k$轮结束时停止，第$i$轮花$A_i$元买到$B_i$瓶饮料。</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
-    =&\lim_{k \to \infty} \sum_{x,y} \operatorname{P}(A=x \wedge B=y) \frac{x}{y} \\
-    =&\lim_{k \to \infty} \sum_{y=0}^C \sum_{x} \operatorname{P}(A=x \wedge B=k+y) \frac{x}{k+y} \quad &\text{($b_i$有界，存在常数$C$使$B-k \leq C$)} \\
-    =&\sum_{y=0}^C \lim_{k \to \infty} \frac{1}{k+y} \sum_{x} x \operatorname{P}(A=x \wedge B=k+y) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \sum_{x} x \operatorname{P}(A=x) \sum_{y=0}^C  \operatorname{P}(B=k+y|A=x) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}(A) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{N_k} A_i\right) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{\infty} A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-\end{aligned}</script><p>考虑应用Fubini–Tonelli定理，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right|\right) \\
-    =&\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i\right|\right) \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right) \quad &\text{(Indicator只依赖于前$i-1$次，与$A_i$独立)} \\
-    =&\operatorname{E}\left(\left|A_1\right|\right) \operatorname{E}\left(N_k\right) < \infty \\
-\end{aligned}</script><p>于是原式，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    =&\lim_{k \to \infty} \frac{1}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \operatorname{E}\left(N_k\right) \\
-    =&\operatorname{E}\left(A_1\right) \lim_{k \to \infty} \operatorname{E}\left(\frac{N_k}{k}\right) \\
-    =&\frac{\operatorname{E}\left(A_1\right)}{\operatorname{E}\left(B_1\right)} \quad &\text{(Renewal Process结论)} \\
-    =&\frac{\sum p_i a_i}{\sum p_i b_i} \\
-\end{aligned}</script><h1 id="2"><a href="#2" class="headerlink" title="2"></a>2</h1><h2 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h2><p>$b_i &gt; 0$</p>
-<p>固定买$k$次停下，仍然求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
-<h2 id="解答-1"><a href="#解答-1" class="headerlink" title="解答"></a>解答</h2><p>记$d=\frac{\operatorname{E}\left(a\right)}{\operatorname{E}\left(b\right)}, p(\epsilon_1, \epsilon_2)=\operatorname{P}\left(\overline{A}_k=\operatorname{E}\left(a\right)+\epsilon_1 \wedge \overline{B}_k=\operatorname{E}\left(b\right)+\epsilon_2\right)$。</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
-    =&\lim_{k \to \infty} \operatorname{E}\left(\frac{\overline{A}_k}{\overline{B}_k}\right) \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1, \epsilon_2} p(\epsilon_1, \epsilon_2) \frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2)\frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\right) \left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right) \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
-    =&d+\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
-\end{aligned}</script><p>考虑余项的绝对值，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \left|\sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right)\right| \\
-    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(\left|\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right|+\left|\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right|\right) \\
-    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d\left|\epsilon_2\right|+\left|\epsilon_1\right|\right) \quad &\text{(由$b_i>0$有$\overline{B}_k \geq 1$)} \\
-    =&0 \quad &\text{(弱大数定律夹逼)} \\
-\end{aligned}</script><p>于是，$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)=d=\frac{\sum p_i a_i}{\sum p_i b_i}$。</p>
-<h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="问题-2"><a href="#问题-2" class="headerlink" title="问题"></a>问题</h2><p>几乎同1，但不要求$b_i$有界</p>
-<h2 id="解答-2"><a href="#解答-2" class="headerlink" title="解答"></a>解答</h2><p>我也不知道</p>
-<h1 id="鸣谢"><a href="#鸣谢" class="headerlink" title="鸣谢"></a>鸣谢</h1><p>timetraveler314</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
