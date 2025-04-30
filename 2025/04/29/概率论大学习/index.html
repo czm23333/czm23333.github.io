@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czm23333.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="题设买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i&#x3D;1$。 1问题$\">
+<meta property="og:type" content="article">
+<meta property="og:title" content="概率论大学习">
+<meta property="og:url" content="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="czm&#39;s Blog">
+<meta property="og:description" content="题设买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i&#x3D;1$。 1问题$\">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-04-29T15:28:15.000Z">
+<meta property="article:modified_time" content="2025-04-30T06:23:27.838Z">
+<meta property="article:author" content="czm">
+<meta property="article:tag" content="数学">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>概率论大学习 | czm's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">czm's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">this.log();</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/czm23333" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="czm">
+      <meta itemprop="description" content="写想写的东西">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czm's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          概率论大学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-04-29 23:28:15" itemprop="dateCreated datePublished" datetime="2025-04-29T23:28:15+08:00">2025-04-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-04-30 14:23:27" itemprop="dateModified" datetime="2025-04-30T14:23:27+08:00">2025-04-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">奇怪问题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="题设"><a href="#题设" class="headerlink" title="题设"></a>题设</h1><p>买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i=1$。</p>
+<h1 id="1"><a href="#1" class="headerlink" title="1"></a>1</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>$\operatorname{E}\left(b\right) &gt; 0, b_i \text{有界}$</p>
+<p>现在重复购买直到拥有至少$k$瓶饮料时停下，记最后总共花了$A$元，得到了$B$瓶饮料，求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
+<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><p>买饮料的过程是一个Renewal Process，记最后在第$N_k$轮结束时停止，第$i$轮花$A_i$元买到$B_i$瓶饮料。</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
+    =&\lim_{k \to \infty} \sum_{x,y} \operatorname{P}(A=x \wedge B=y) \frac{x}{y} \\
+    =&\lim_{k \to \infty} \sum_{y=0}^C \sum_{x} \operatorname{P}(A=x \wedge B=k+y) \frac{x}{k+y} \quad &\text{($b_i$有界，存在常数$C$使$B-k \leq C$)} \\
+    =&\sum_{y=0}^C \lim_{k \to \infty} \frac{1}{k+y} \sum_{x} x \operatorname{P}(A=x \wedge B=k+y) \\
+    =&\lim_{k \to \infty} \frac{1}{k} \sum_{x} x \operatorname{P}(A=x) \sum_{y=0}^C  \operatorname{P}(B=k+y|A=x) \\
+    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}(A) \\
+    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{N_k} A_i\right) \\
+    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{\infty} A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
+\end{aligned}</script><p>考虑应用Fubini–Tonelli定理，</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    &\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right|\right) \\
+    =&\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i\right|\right) \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right) \quad &\text{(Indicator只依赖于前$i-1$次，与$A_i$独立)} \\
+    =&\operatorname{E}\left(\left|A_1\right|\right) \operatorname{E}\left(N_k\right) < \infty \\
+\end{aligned}</script><p>于是原式，</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    =&\lim_{k \to \infty} \frac{1}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
+    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
+    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \operatorname{E}\left(N_k\right) \\
+    =&\operatorname{E}\left(A_1\right) \lim_{k \to \infty} \operatorname{E}\left(\frac{N_k}{k}\right) \\
+    =&\frac{\operatorname{E}\left(A_1\right)}{\operatorname{E}\left(B_1\right)} \quad &\text{(Renewal Process结论)} \\
+    =&\frac{\sum p_i a_i}{\sum p_i b_i} \\
+\end{aligned}</script><h1 id="2"><a href="#2" class="headerlink" title="2"></a>2</h1><h2 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h2><p>$b_i &gt; 0$</p>
+<p>固定买$k$次停下，仍然求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
+<h2 id="解答-1"><a href="#解答-1" class="headerlink" title="解答"></a>解答</h2><p>记$d=\frac{\operatorname{E}\left(a\right)}{\operatorname{E}\left(b\right)}, p(\epsilon_1, \epsilon_2)=\operatorname{P}\left(\overline{A}_k=\operatorname{E}\left(a\right)+\epsilon_1 \wedge \overline{B}_k=\operatorname{E}\left(b\right)+\epsilon_2\right)$。</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
+    =&\lim_{k \to \infty} \operatorname{E}\left(\frac{\overline{A}_k}{\overline{B}_k}\right) \\
+    =&\lim_{k \to \infty} \sum_{\epsilon_1, \epsilon_2} p(\epsilon_1, \epsilon_2) \frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
+    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2)\frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
+    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\right) \left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right) \\
+    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
+    =&d+\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
+\end{aligned}</script><p>考虑余项的绝对值，</p>
+<script type="math/tex; mode=display">\begin{aligned}
+    &\lim_{k \to \infty} \left|\sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right)\right| \\
+    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(\left|\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right|+\left|\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right|\right) \\
+    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d\left|\epsilon_2\right|+\left|\epsilon_1\right|\right) \quad &\text{(由$b_i>0$有$\overline{B}_k \geq 1$)} \\
+    =&0 \quad &\text{(弱大数定律夹逼)} \\
+\end{aligned}</script><p>于是，$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)=d=\frac{\sum p_i a_i}{\sum p_i b_i}$。</p>
+<h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="问题-2"><a href="#问题-2" class="headerlink" title="问题"></a>问题</h2><p>几乎同1，但不要求$b_i$有界</p>
+<h2 id="解答-2"><a href="#解答-2" class="headerlink" title="解答"></a>解答</h2><p>我也不知道</p>
+<h1 id="鸣谢"><a href="#鸣谢" class="headerlink" title="鸣谢"></a>鸣谢</h1><p>timetraveler314</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/01/08/%E8%AE%A1%E7%BB%8460%E5%88%86%E6%8C%87%E5%8C%97/" rel="prev" title="计组60分指北">
+      <i class="fa fa-chevron-left"></i> 计组60分指北
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%AE%BE"><span class="nav-number">1.</span> <span class="nav-text">题设</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1"><span class="nav-number">2.</span> <span class="nav-text">1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2"><span class="nav-number">3.</span> <span class="nav-text">2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-1"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="nav-number">3.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3"><span class="nav-number">4.</span> <span class="nav-text">3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-2"><span class="nav-number">4.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-2"><span class="nav-number">4.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%B8%A3%E8%B0%A2"><span class="nav-number">5.</span> <span class="nav-text">鸣谢</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">czm</p>
+  <div class="site-description" itemprop="description">写想写的东西</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/czm23333" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;czm23333" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:czm2333@hotmail.com" title="E-Mail → mailto:czm2333@hotmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">czm</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : '1fcaa908f4ec87eefaba',
+      clientSecret: '85bf78ebfd0610fcbfda9b9f692954fe3251bda5',
+      repo        : 'czm23333.github.io',
+      owner       : 'czm23333',
+      admin       : ['czm23333'],
+      id          : '12abb6b2e97a5741639479b213c7a14b',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
