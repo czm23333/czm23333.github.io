@@ -20,20 +20,21 @@
     var CONFIG = {"hostname":"czm23333.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="题设买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i&#x3D;1$。">
+  <meta name="description" content="存活区间引理前段时间写作业的时候，随手推了一个很小的引理，姑且叫它存活区间引理：对于满足任何一处对变量的使用都被这个变量的定义支配（姑且称为强定义条件）的SSA程序，任何变量的存活区间都是支配树上以定义为根的子树内，包含定义本身在内的一个连通子图。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="概率论大学习">
-<meta property="og:url" content="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:title" content="SSA与弦图随记">
+<meta property="og:url" content="https://czm23333.github.io/2025/06/13/SSA%E4%B8%8E%E5%BC%A6%E5%9B%BE%E9%9A%8F%E8%AE%B0/index.html">
 <meta property="og:site_name" content="czm&#39;s Blog">
-<meta property="og:description" content="题设买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i&#x3D;1$。">
+<meta property="og:description" content="存活区间引理前段时间写作业的时候，随手推了一个很小的引理，姑且叫它存活区间引理：对于满足任何一处对变量的使用都被这个变量的定义支配（姑且称为强定义条件）的SSA程序，任何变量的存活区间都是支配树上以定义为根的子树内，包含定义本身在内的一个连通子图。">
 <meta property="og:locale">
-<meta property="article:published_time" content="2025-04-29T15:28:15.000Z">
-<meta property="article:modified_time" content="2025-04-30T06:55:29.630Z">
+<meta property="article:published_time" content="2025-06-13T05:29:07.000Z">
+<meta property="article:modified_time" content="2025-06-13T06:42:52.850Z">
 <meta property="article:author" content="czm">
 <meta property="article:tag" content="数学">
+<meta property="article:tag" content="编译">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/">
+<link rel="canonical" href="https://czm23333.github.io/2025/06/13/SSA%E4%B8%8E%E5%BC%A6%E5%9B%BE%E9%9A%8F%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -46,7 +47,7 @@
   };
 </script>
 
-  <title>概率论大学习 | czm's Blog</title>
+  <title>SSA与弦图随记 | czm's Blog</title>
   
 
 
@@ -154,7 +155,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/">
+    <link itemprop="mainEntityOfPage" href="https://czm23333.github.io/2025/06/13/SSA%E4%B8%8E%E5%BC%A6%E5%9B%BE%E9%9A%8F%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -167,7 +168,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          概率论大学习
+          SSA与弦图随记
         </h1>
 
         <div class="post-meta">
@@ -176,24 +177,9 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2025-04-29 23:28:15" itemprop="dateCreated datePublished" datetime="2025-04-29T23:28:15+08:00">2025-04-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-04-30 14:55:29" itemprop="dateModified" datetime="2025-04-30T14:55:29+08:00">2025-04-30</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">奇怪问题</span></a>
-                </span>
+              <time title="创建时间：2025-06-13 13:29:07 / 修改时间：14:42:52" itemprop="dateCreated datePublished" datetime="2025-06-13T13:29:07+08:00">2025-06-13</time>
             </span>
 
           
@@ -207,53 +193,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="题设"><a href="#题设" class="headerlink" title="题设"></a>题设</h1><p>买饮料有若干种方案，每次购买有$p_i$的概率选择第$i$种方案，花$a_i$元买到$b_i$瓶饮料，$a_i \in \mathbb{Z}, b_i \in \mathbb{Z}, \operatorname{E}\left(a\right) &lt; \infty, \operatorname{E}\left(b\right) &lt; \infty, \sum p_i=1$。</p>
+        <h1 id="存活区间引理"><a href="#存活区间引理" class="headerlink" title="存活区间引理"></a>存活区间引理</h1><p>前段时间写作业的时候，随手推了一个很小的引理，姑且叫它存活区间引理：对于满足任何一处对变量的使用都被这个变量的定义支配（姑且称为强定义条件）的SSA程序，任何变量的存活区间都是支配树上以定义为根的子树内，包含定义本身在内的一个连通子图。</p>
 <span id="more"></span>
-<h1 id="1"><a href="#1" class="headerlink" title="1"></a>1</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>$\operatorname{E}\left(b\right) &gt; 0, b_i \text{有上界}$</p>
-<p>现在重复购买直到拥有至少$k$瓶饮料时停下，记最后总共花了$A$元，得到了$B$瓶饮料，求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
-<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><p>买饮料的过程是一个Renewal Process，记最后在第$N_k$轮结束时停止，第$i$轮花$A_i$元买到$B_i$瓶饮料。</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
-    =&\lim_{k \to \infty} \sum_{x,y} \operatorname{P}(A=x \wedge B=y) \frac{x}{y} \\
-    =&\lim_{k \to \infty} \sum_{y=0}^C \sum_{x} \operatorname{P}(A=x \wedge B=k+y) \frac{x}{k+y} \quad &\text{($b_i$有上界，存在常数$C$使$B-k \leq C$)} \\
-    =&\sum_{y=0}^C \lim_{k \to \infty} \frac{1}{k+y} \sum_{x} x \operatorname{P}(A=x \wedge B=k+y) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \sum_{x} x \operatorname{P}(A=x) \sum_{y=0}^C  \operatorname{P}(B=k+y|A=x) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}(A) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{N_k} A_i\right) \\
-    =&\lim_{k \to \infty} \frac{1}{k} \operatorname{E}\left(\sum_{i=1}^{\infty} A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-\end{aligned}</script><p>考虑应用Fubini–Tonelli定理，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right|\right) \\
-    =&\sum_{i=1}^{\infty}\operatorname{E}\left(\left|A_i\right|\right) \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}}\right) \quad &\text{(Indicator只依赖于前$i-1$次，与$A_i$独立)} \\
-    =&\operatorname{E}\left(\left|A_1\right|\right) \operatorname{E}\left(N_k\right) < \infty \\
-\end{aligned}</script><p>于是原式，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    =&\lim_{k \to \infty} \frac{1}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(A_i \operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \sum_{i=1}^{\infty} \operatorname{E}\left(\operatorname{\mathbb{I}}_{\{N_k \geq i\}} \right) \\
-    =&\lim_{k \to \infty} \frac{\operatorname{E}\left(A_1\right)}{k} \operatorname{E}\left(N_k\right) \\
-    =&\operatorname{E}\left(A_1\right) \lim_{k \to \infty} \operatorname{E}\left(\frac{N_k}{k}\right) \\
-    =&\frac{\operatorname{E}\left(A_1\right)}{\operatorname{E}\left(B_1\right)} \quad &\text{(Renewal Process结论)} \\
-    =&\frac{\sum p_i a_i}{\sum p_i b_i} \\
-\end{aligned}</script><h1 id="2"><a href="#2" class="headerlink" title="2"></a>2</h1><h2 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h2><p>$b_i &gt; 0$</p>
-<p>固定买$k$次停下，仍然求$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)$。</p>
-<h2 id="解答-1"><a href="#解答-1" class="headerlink" title="解答"></a>解答</h2><p>记$d=\frac{\operatorname{E}\left(a\right)}{\operatorname{E}\left(b\right)}, p(\epsilon_1, \epsilon_2)=\operatorname{P}\left(\overline{A}_k=\operatorname{E}\left(a\right)+\epsilon_1 \wedge \overline{B}_k=\operatorname{E}\left(b\right)+\epsilon_2\right)$。</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right) \\
-    =&\lim_{k \to \infty} \operatorname{E}\left(\frac{\overline{A}_k}{\overline{B}_k}\right) \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1, \epsilon_2} p(\epsilon_1, \epsilon_2) \frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2)\frac{\operatorname{E}\left(a\right)+\epsilon_1}{\operatorname{E}\left(b\right)+\epsilon_2} \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\right) \left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right) \\
-    =&\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
-    =&d+\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right) \\
-\end{aligned}</script><p>考虑余项的绝对值，</p>
-<script type="math/tex; mode=display">\begin{aligned}
-    &\lim_{k \to \infty} \left|\sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(-\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}+\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right)\right| \\
-    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(\left|\frac{d \epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right|+\left|\frac{\epsilon_1}{\operatorname{E}\left(b\right)}\left(1-\frac{\epsilon_2}{\operatorname{E}\left(b\right)+\epsilon_2}\right)\right|\right) \\
-    \leq &\lim_{k \to \infty} \sum_{\epsilon_1} \sum_{\epsilon_2} p(\epsilon_1, \epsilon_2) \left(d\left|\epsilon_2\right|+\left|\epsilon_1\right|\right) \quad &\text{(由$b_i>0$有$\overline{B}_k \geq 1$)} \\
-    =&0 \quad &\text{(弱大数定律夹逼)} \\
-\end{aligned}</script><p>于是，$\lim_{k \to \infty} \operatorname{E}\left(\frac{A}{B}\right)=d=\frac{\sum p_i a_i}{\sum p_i b_i}$。</p>
-<h1 id="3"><a href="#3" class="headerlink" title="3"></a>3</h1><h2 id="问题-2"><a href="#问题-2" class="headerlink" title="问题"></a>问题</h2><p>几乎同1，但不要求$b_i$有上界</p>
-<h2 id="解答-2"><a href="#解答-2" class="headerlink" title="解答"></a>解答</h2><p>我也不知道</p>
+<p>证明是简单的：明确一下存活的定义，一个变量在某个点$P$处是存活的，当且仅当存在一条从入口出发的路径满足其依次经过变量的定义$D$、$P$和对变量的使用$U$，并且在$P$到$U$的部分没有再次经过$D$。</p>
+<p>对于不在子树内的$P$，若变量在此是存活的，拼接一条从入口到$P$且不经过$U$的路径和上述路径的后半部分，可以发现存在$D$不被定义所支配，不符合强定义条件。</p>
+<p>对于在子树内的$P$，首先我们证明对于任意$P’$满足$D$支配$P’$，$P’$支配$P$，都存在一条路径从$P’$到$P$且不经过$D$。考虑反证，若任何一条从$P’$到$P$的路径都经过$D$，对于最短的这样的路径，其中从$D$到$P$的部分一定不经过$P’$（否则有一条更短的路径），既然$P’$不支配$D$，拼接路径就可以发现$P’$不支配$P$，矛盾。</p>
+<p>然后，利用这个结论可以很容易地得出，如果变量在$P$处是存活的，则它在任意$P’$处也是存活的，因此存活区间是包含定义本身在内的一个连通子图。</p>
+<h1 id="弦图"><a href="#弦图" class="headerlink" title="弦图"></a>弦图</h1><p>几天前聊天的时候，发现这个引理和某个很酷的结论其实非常近：满足强定义条件的SSA程序的干涉图都是弦图。</p>
+<p>利用上面的小引理，证明也是简单的：同样先明确一下干涉的定义，如果两个变量的存活区间有交，它们就互相干涉。</p>
+<p>从存活区间引理可以看出，如果两个变量相互干涉，其中一个变量的定义必定支配另一个。也就是说，干涉图上的任意一条边都对应支配树上一条深度单调的路径，从这个结果出发对干涉图上的环分类讨论就能轻松地完成证明。</p>
+<p>对于干涉图上的一个非三元环，记其某一顶点序列为$D_1,D_2,\cdots,D_n$，我们需要证明它一定存在一条弦。由于$D_1$和$D_n$一定存在支配关系，不妨设$D_n$支配$D_1$。</p>
+<p>若除$D_n$之外的所有点都在以$D_1$为根的子树内，记其他这些点的最小公共祖先为$C$，考虑深度可以发现一定存在一个$1 &lt; i &lt; n$满足$D_i=C$，于是$D_i \neq D_1, D_i \neq D_n$，同时根据存活区间引理可以知道$D_i$和$D_1, D_n$都相互干涉，也就是它们构成一个三元环，如此便找到了弦。</p>
+<p>否则，考虑该序列中第一个不在以$D_1$为根的子树内的顶点$D_i, 1 &lt; i &lt; n$，由存活区间引理可以发现$D_i$必定与$D_1$相互干涉。若$i \neq 2$，$D_1D_i$就是一条弦。否则若$i = 2$，考虑要么$D_2$支配$D_n$，要么$D_n$支配$D_2$，对两种情况应用存活区间引理都可以容易地得到$D_2D_n$是一条弦。</p>
+<p>我还以为这个结论很难证，结果竟然这么简单，在此稍微记一下。</p>
 <h1 id="鸣谢"><a href="#鸣谢" class="headerlink" title="鸣谢"></a>鸣谢</h1><p>timetraveler314</p>
 
     </div>
@@ -265,6 +217,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E6%95%B0%E5%AD%A6/" rel="tag"># 数学</a>
+              <a href="/tags/%E7%BC%96%E8%AF%91/" rel="tag"># 编译</a>
           </div>
 
         
@@ -273,13 +226,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2025/01/08/%E8%AE%A1%E7%BB%8460%E5%88%86%E6%8C%87%E5%8C%97/" rel="prev" title="计组60分指北">
-      <i class="fa fa-chevron-left"></i> 计组60分指北
+    <a href="/2025/04/29/%E6%A6%82%E7%8E%87%E8%AE%BA%E5%A4%A7%E5%AD%A6%E4%B9%A0/" rel="prev" title="概率论大学习">
+      <i class="fa fa-chevron-left"></i> 概率论大学习
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2025/06/13/SSA%E4%B8%8E%E5%BC%A6%E5%9B%BE%E9%9A%8F%E8%AE%B0/" rel="next" title="SSA与弦图随记">
-      SSA与弦图随记 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -339,7 +289,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E8%AE%BE"><span class="nav-number">1.</span> <span class="nav-text">题设</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1"><span class="nav-number">2.</span> <span class="nav-text">1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2"><span class="nav-number">3.</span> <span class="nav-text">2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-1"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-1"><span class="nav-number">3.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3"><span class="nav-number">4.</span> <span class="nav-text">3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98-2"><span class="nav-number">4.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94-2"><span class="nav-number">4.2.</span> <span class="nav-text">解答</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%B8%A3%E8%B0%A2"><span class="nav-number">5.</span> <span class="nav-text">鸣谢</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E6%B4%BB%E5%8C%BA%E9%97%B4%E5%BC%95%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">存活区间引理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%A6%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text">弦图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%B8%A3%E8%B0%A2"><span class="nav-number">3.</span> <span class="nav-text">鸣谢</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -523,7 +473,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'czm23333.github.io',
       owner       : 'czm23333',
       admin       : ['czm23333'],
-      id          : '12abb6b2e97a5741639479b213c7a14b',
+      id          : '65ac4747a032e732f00eb805ba42b553',
         language: 'zh-CN',
       distractionFreeMode: true
     });
