@@ -28,7 +28,7 @@
 <meta property="og:description" content="存活区间引理前段时间写作业的时候，随手推了一个很小的引理，姑且叫它存活区间引理：对于满足任何一处对变量的使用都被这个变量的定义支配（姑且称为强定义条件）的SSA程序，任何变量的存活区间都是支配树上以定义为根的子树内，包含定义本身在内的一个连通子图。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2025-06-13T05:29:07.000Z">
-<meta property="article:modified_time" content="2025-06-13T06:42:52.850Z">
+<meta property="article:modified_time" content="2025-06-14T08:54:09.471Z">
 <meta property="article:author" content="czm">
 <meta property="article:tag" content="数学">
 <meta property="article:tag" content="编译">
@@ -177,10 +177,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2025-06-13 13:29:07 / 修改时间：14:42:52" itemprop="dateCreated datePublished" datetime="2025-06-13T13:29:07+08:00">2025-06-13</time>
+              <time title="创建时间：2025-06-13 13:29:07" itemprop="dateCreated datePublished" datetime="2025-06-13T13:29:07+08:00">2025-06-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-06-14 16:54:09" itemprop="dateModified" datetime="2025-06-14T16:54:09+08:00">2025-06-14</time>
+              </span>
 
           
 
@@ -196,8 +202,8 @@
         <h1 id="存活区间引理"><a href="#存活区间引理" class="headerlink" title="存活区间引理"></a>存活区间引理</h1><p>前段时间写作业的时候，随手推了一个很小的引理，姑且叫它存活区间引理：对于满足任何一处对变量的使用都被这个变量的定义支配（姑且称为强定义条件）的SSA程序，任何变量的存活区间都是支配树上以定义为根的子树内，包含定义本身在内的一个连通子图。</p>
 <span id="more"></span>
 <p>证明是简单的：明确一下存活的定义，一个变量在某个点$P$处是存活的，当且仅当存在一条从入口出发的路径满足其依次经过变量的定义$D$、$P$和对变量的使用$U$，并且在$P$到$U$的部分没有再次经过$D$。</p>
-<p>对于不在子树内的$P$，若变量在此是存活的，拼接一条从入口到$P$且不经过$U$的路径和上述路径的后半部分，可以发现存在$D$不被定义所支配，不符合强定义条件。</p>
-<p>对于在子树内的$P$，首先我们证明对于任意$P’$满足$D$支配$P’$，$P’$支配$P$，都存在一条路径从$P’$到$P$且不经过$D$。考虑反证，若任何一条从$P’$到$P$的路径都经过$D$，对于最短的这样的路径，其中从$D$到$P$的部分一定不经过$P’$（否则有一条更短的路径），既然$P’$不支配$D$，拼接路径就可以发现$P’$不支配$P$，矛盾。</p>
+<p>对于不在子树内的$P$，若变量在此是存活的，拼接一条从入口到$P$且不经过$D$的路径和上述路径的后半部分，可以发现存在$U$不被定义所支配，不符合强定义条件。</p>
+<p>对于在子树内的$P$，首先我们证明对于任意$P’ \neq D$满足$D$支配$P’$，$P’$支配$P$，都存在一条路径从$P’$到$P$且不经过$D$。考虑反证，若任何一条从$P’$到$P$的路径都经过$D$，对于最短的这样的路径，其中从$D$到$P$的部分一定不经过$P’$（否则有一条更短的路径），既然$P’$不支配$D$，拼接路径就可以发现$P’$不支配$P$，矛盾。</p>
 <p>然后，利用这个结论可以很容易地得出，如果变量在$P$处是存活的，则它在任意$P’$处也是存活的，因此存活区间是包含定义本身在内的一个连通子图。</p>
 <h1 id="弦图"><a href="#弦图" class="headerlink" title="弦图"></a>弦图</h1><p>几天前聊天的时候，发现这个引理和某个很酷的结论其实非常近：满足强定义条件的SSA程序的干涉图都是弦图。</p>
 <p>利用上面的小引理，证明也是简单的：同样先明确一下干涉的定义，如果两个变量的存活区间有交，它们就互相干涉。</p>
